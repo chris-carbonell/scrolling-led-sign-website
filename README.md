@@ -10,3 +10,6 @@ frontend app to control my DIY scrolling LED sign
 * run
     * `docker-compose up -d`
     * app should be available at `localhost:8000`
+
+# Resources
+* sample flask app<br>https://github.com/docker/awesome-compose/tree/master/flask
