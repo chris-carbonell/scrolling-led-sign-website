@@ -14,3 +14,6 @@ frontend app to control my DIY scrolling LED sign
 # Resources
 * sample flask app<br>https://github.com/docker/awesome-compose/tree/master/flask
 * getting user text<br>https://stackoverflow.com/questions/12277933/send-data-from-a-textbox-into-flask
+* form template<br>https://freefrontend.com/css-input-text/
+    * favorites
+        * https://codepen.io/bertdida/pen/xyPKRX
