@@ -4,5 +4,9 @@ frontend app to control my DIY scrolling LED sign
 # Goals
 * users can submit text to scroll
 
-# Roadmap
-* queue shows incoming text
+# Quickstart
+* build
+    * `docker-compose build`
+* run
+    * `docker-compose up -d`
+    * app should be available at `localhost:8000`
