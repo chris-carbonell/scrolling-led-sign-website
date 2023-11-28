@@ -1,4 +1,12 @@
-<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/style.scss') }}">
+<script>
+  // get datetime string
+  var currentdate = new Date(); 
+  var datetime = currentdate.getFullYear() + "-" + (currentdate.getMonth()+1).toString().padStart(2, '0') + "-" + currentdate.getDate().toString().padStart(2, '0') + "_" + currentdate.getHours() + currentdate.getMinutes() + currentdate.getSeconds();
+      
+  // write
+  document.write("<link rel='stylesheet' href='/style.css?v=" + datetime + "'/>");
+</script> 
+
 <input class="c-checkbox" type="checkbox" id="checkbox">
 <div class="c-formContainer">
   <form class="c-form" action="">
