@@ -25,7 +25,7 @@ body {
     transform: scale(1);
   }
   .c-checkbox:not(:checked) + .c-formContainer .c-form__input:required:valid ~ .c-form__toggle::before, .c-checkbox:checked + .c-formContainer .c-form__input:required:valid ~ .c-form__toggle::before {
-    content: 'Thank You! \1F60A';
+    content: 'sent! \1F60A';
   }
   .c-checkbox:not(:checked) + .c-formContainer .c-form__input:required:valid ~ .c-form__toggle {
     pointer-events: none;

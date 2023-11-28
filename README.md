@@ -19,3 +19,9 @@ frontend app to control my DIY scrolling LED sign
         * https://codepen.io/bertdida/pen/xyPKRX
             * I used an online compiler to get the CSS from the SCSS
         * https://codepen.io/aaroniker/pen/dybMVMB
+        * https://codepen.io/vineethtrv/pen/ZBpebQ
+            * one liner sign up that cycles back to start
+        * https://codepen.io/chouaibblgn45/pen/rzewrO
+            * cool search bar
+        * https://codepen.io/eyesight/pen/KGEebY
+            * send button goes to done goes back to send using JS
