@@ -1,4 +1,5 @@
-# https://hub.docker.com/_/nginx
+# # Overview
+# set up website, database, and API
 
 version: '2'
 
