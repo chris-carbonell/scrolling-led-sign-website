@@ -10,9 +10,11 @@ services:
   # login with:
   # `docker exec -it ${CONTAINER_NAME} psql -d ${POSTGRES_DB} -U ${POSTGRES_USER} -W`
   # once in `psql`, quit with `\q`
-  postgres:
+  db:
     image: postgres:16.1
     container_name: ${PROJECT_NAME}-db
+
+    restart: always
 
     ports:
       - "5432:5432"
