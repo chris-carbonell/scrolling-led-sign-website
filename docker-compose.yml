@@ -5,48 +5,11 @@ version: '3.7'
 name: scrolling-led-sign-website  # project name (aka stack)
 
 services:
-    
-    # website
-    scrolling-led-sign-website:
-        image: nginx:stable-alpine
-        container_name: scrolling-led-sign-website
-        
-        restart: unless-stopped
-        
-        volumes:
-          - type: bind
-            source: ./html
-            target: /usr/share/nginx/html
 
-        ports:
-          - "8086:80"
-
-#         labels:
-#           - "traefik.enable=true"
-#           - "traefik.docker.network=web"
-          
-#           # routers
-
-#           ## http
-#           - "traefik.http.routers.dobodata-www.entrypoints=web"
-#           - "traefik.http.routers.dobodata-www.rule=Host(`dobodata.com`) || Host(`www.dobodata.com`)"
-
-#           ## https
-#           - "traefik.http.routers.dobodata-www-secure.entrypoints=websecure"
-#           - "traefik.http.routers.dobodata-www-secure.rule=Host(`dobodata.com`) || Host(`www.dobodata.com`)"
-#           - "traefik.http.routers.dobodata-www-secure.tls=true"
-#           - "traefik.http.routers.dobodata-www-secure.tls.certresolver=cloudflare"
-#           - "traefik.http.routers.dobodata-www-secure.service=dobodata-www"
-
-#           # middlewares
-#           - "traefik.http.routers.dobodata-www.middlewares=https-redirect@file,secure-headers@file"
-
-#           # services
-#           - "traefik.http.services.dobodata-www.loadbalancer.server.port=80"
-
-#         networks:
-#           - web
-
-# networks:
-#   web:
-#     external: true
+  db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
