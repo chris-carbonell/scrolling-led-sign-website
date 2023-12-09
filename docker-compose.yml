@@ -1,7 +1,7 @@
 # # Overview
 # set up website, database, and API
 
-version: '2'
+version: '3.7'
 
 name: ${PROJECT_NAME}  # project name (aka stack)
 
