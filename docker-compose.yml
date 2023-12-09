@@ -2,33 +2,24 @@
 
 version: '2'
 
-# name: scrolling-led-sign-website  # project name (aka stack)
 name: ${PROJECT_NAME}  # project name (aka stack)
 
 services:
 
-  # db:
-  #   image: postgres
-  #   container_name: ${PROJECT_NAME}-db
-  #   restart: always
-  #   environment:
-  #     POSTGRES_USER: ${POSTGRES_USER}
-  #     POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-  #   volumes:
-  #     - ${PATH_ROOT}/db:/var/lib/postgresql/data
-
-  # this works!
   # login with:
-  # `docker exec -it ${CONTAINER_NAME} psql -d test_db -U test -W`
+  # `docker exec -it ${CONTAINER_NAME} psql -d ${POSTGRES_DB} -U ${POSTGRES_USER} -W`
   # once in `psql`, quit with `\q`
   postgres:
     image: postgres:16.1
     container_name: ${PROJECT_NAME}-db
+
     ports:
       - "5432:5432"
+    
     environment:
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - POSTGRES_DB=${POSTGRES_DB}
+    
     volumes:
       - ./db:/var/lib/postgresql/data
