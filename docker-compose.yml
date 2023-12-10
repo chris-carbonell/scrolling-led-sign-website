@@ -32,3 +32,16 @@ services:
     
     volumes:
       - ./db:/var/lib/postgresql/data
+
+  # # api
+  api:
+    build: ./api
+    command: python test.py
+
+    container_name: ${PROJECT_NAME}-api
+
+    depends_on:
+      - db
+      
+    volumes:
+      - ./api:/usr/src/api
