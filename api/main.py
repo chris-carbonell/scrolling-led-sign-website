@@ -25,8 +25,8 @@ def parse_tags(tags: str):
     convert "a,b, c" to "'a', 'b', 'c'"
     for use with ARRAY[]
     '''
-    tags_where = ", ".join(["'" + tag.strip() + "'" for tag in tags.split()])
-    return ', '.join([tags_where])
+    tags_where = ["'" + tag.strip() + "'" for tag in tags.split(",")]
+    return ', '.join(tags_where)
 
 def get_now_text():
     '''
@@ -65,10 +65,10 @@ async def get_text(tags: str = None, asc: bool = True):
     '''
 
     # get sql
-    sql = "SELECT \n\ttext_id\n\t, text \nFROM texts"
+    sql = "SELECT \n\ttext_id\n\t, text \nFROM texts, UNNEST(text_tags) as tt"
     sql += "\nWHERE dt_requested IS NULL"
     if tags:
-        sql += f"\n\tAND text_tags @> ARRAY[{parse_tags(tags)}]"
+        sql += f"\n\tAND tt = ANY(ARRAY[{parse_tags(tags)}])"
     sql += "\nORDER BY dt_entered"
     if asc:
         sql += " ASC"
@@ -120,7 +120,7 @@ async def put_text(
     sql += "NULL, "  # dt_requested
     sql += "'" + request.client.host + "', "  # client_host
     sql += "'" + source + "', "  # text_source
-    sql += f"ARRAY[{parse_tags(tags)}]" if tags else "NULL, "
+    sql += f"ARRAY[{parse_tags(tags)}], " if tags else "NULL, "
     sql += "'" + text + "');"
 
     # execute
