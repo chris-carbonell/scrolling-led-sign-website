@@ -4,3 +4,6 @@ uvicorn[standard]
 
 # data
 psycopg2
+
+# tests
+pytest
