@@ -7,7 +7,7 @@ import pytest
 import os
 
 # app
-from utils.conn import connection
+from utils.connection import connection
 
 # Tests
 

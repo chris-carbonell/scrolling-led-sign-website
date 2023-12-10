@@ -10,7 +10,7 @@ import os
 from fastapi import FastAPI
 
 # data
-from utils.conn import connection
+from utils.connection import connection
 
 # app
 app = FastAPI()
