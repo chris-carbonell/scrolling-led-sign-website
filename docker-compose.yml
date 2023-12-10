@@ -1,15 +1,21 @@
 # # Overview
 # set up website, database, and API
 
+# # Todo
+# * add python api to pull from and update database
+# * add fastui website to add to database
+
 version: '3.7'
 
 name: ${PROJECT_NAME}  # project name (aka stack)
 
 services:
 
-  # login with:
+  # # db
+  # * database
+  # * login with:<br>
   # `docker exec -it ${CONTAINER_NAME} psql -d ${POSTGRES_DB} -U ${POSTGRES_USER} -W`
-  # once in `psql`, quit with `\q`
+  # * once in `psql`, quit with `\q`
   db:
     image: postgres:16.1
     container_name: ${PROJECT_NAME}-db
