@@ -12,7 +12,7 @@ name: ${PROJECT_NAME}  # project name (aka stack)
 services:
 
   # # db
-  # * database
+  # database
   # * login with:<br>
   # `docker exec -it ${CONTAINER_NAME} psql -d ${POSTGRES_DB} -U ${POSTGRES_USER} -W`
   # * once in `psql`, quit with `\q`
@@ -23,7 +23,7 @@ services:
     restart: always
 
     ports:
-      - "5432:5432"
+      - "5432:${POSTGRES_PORT}"
     
     environment:
       - POSTGRES_USER=${POSTGRES_USER}
@@ -34,6 +34,7 @@ services:
       - ./db:/var/lib/postgresql/data
 
   # # api
+  # fastapi backend for interacting with database
   api:
     build: ./api
     command: python test.py
@@ -42,6 +43,9 @@ services:
 
     depends_on:
       - db
+
+    env_file:
+      - .env
       
     volumes:
       - ./api:/usr/src/api
