@@ -1,3 +1,7 @@
+# # Overview
+# * build python env for api
+# * execution is handled in docker-compose.yml
+
 FROM python:3.11-slim
 
 # install dependencies
