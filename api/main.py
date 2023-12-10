@@ -100,6 +100,8 @@ async def get_text(tags: str = None, asc: bool = True):
 
     return {'text': text}
 
+## put
+
 @app.put("/text", tags=["put"])
 async def put_text(
     text: str,
