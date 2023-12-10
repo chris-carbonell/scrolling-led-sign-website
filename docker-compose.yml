@@ -37,7 +37,7 @@ services:
   # fastapi backend for interacting with database
   api:
     build: ./api
-    command: python test.py
+    command: uvicorn main:app --host=0.0.0.0
 
     container_name: ${PROJECT_NAME}-api
 
@@ -46,6 +46,9 @@ services:
 
     env_file:
       - .env
-      
+
+    ports:
+      - 8000:8000
+
     volumes:
       - ./api:/usr/src/api
