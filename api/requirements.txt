@@ -1,3 +1,6 @@
+# general
+requests
+
 # api
 fastapi
 uvicorn[standard]
