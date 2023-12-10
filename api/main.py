@@ -18,6 +18,9 @@ app = FastAPI()
 
 # endpoints
 
-@app.get("/")
+@app.get("/healthcheck")
 async def root():
-    return {"message": "Hello World"}
+    '''
+    health check for container
+    '''
+    return

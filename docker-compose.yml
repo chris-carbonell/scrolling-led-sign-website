@@ -33,10 +33,16 @@ services:
     volumes:
       - ./db:/var/lib/postgresql/data
 
+    healthcheck:
+      test: pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}
+      interval: 10s
+      timeout: 3s
+      retries: 3
+
   # # api
   # fastapi backend for interacting with database
   api:
-    build: ./api
+    build: ./api  # build with `docker-compose build`
     command: uvicorn main:app --host=0.0.0.0
 
     container_name: ${PROJECT_NAME}-api
@@ -52,3 +58,10 @@ services:
 
     volumes:
       - ./api:/usr/src/api
+
+    healthcheck:
+      test: curl http://localhost:8000/healthcheck || exit 1
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+      start_period: 2m
