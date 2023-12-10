@@ -17,7 +17,8 @@ services:
   # `docker exec -it ${CONTAINER_NAME} psql -d ${POSTGRES_DB} -U ${POSTGRES_USER} -W`
   # * once in `psql`, quit with `\q`
   db:
-    image: postgres:16.1
+    build: ./db  # build with `docker-compose build`
+
     container_name: ${PROJECT_NAME}-db
 
     restart: always
@@ -31,10 +32,10 @@ services:
       - POSTGRES_DB=${POSTGRES_DB}
     
     volumes:
-      - ./db:/var/lib/postgresql/data
+      - ./db/data:/var/lib/postgresql/data
 
     healthcheck:
-      test: pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}
+      test: pg_isready -d ${POSTGRES_DB} -U ${POSTGRES_USER}
       interval: 10s
       timeout: 3s
       retries: 3
@@ -43,7 +44,7 @@ services:
   # fastapi backend for interacting with database
   api:
     build: ./api  # build with `docker-compose build`
-    command: uvicorn main:app --host=0.0.0.0
+    command: uvicorn main:app --host=0.0.0.0 --reload
 
     container_name: ${PROJECT_NAME}-api
 
