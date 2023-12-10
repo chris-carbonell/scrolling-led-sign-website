@@ -9,6 +9,8 @@ import requests
 # constants
 from . import *
 
+# Tests
+
 def test_health_check_exists():
     '''
     GIVEN   no params
