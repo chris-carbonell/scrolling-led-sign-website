@@ -133,7 +133,14 @@ def get_text(background_tasks: BackgroundTasks, tags: str = None, asc: bool = Tr
 
 @app.get("/texts", tags=["get"])
 def get_texts():
-    return
+    '''
+    get all texts
+    '''
+
+    # get data
+    data = template_execute("get_text_all.sql", "fetchall")
+
+    return data
 
 ## put
 
