@@ -166,5 +166,3 @@ def put_text(
     )
 
     return
-
-# TODO: get n texts asc/desc for checking in on people
