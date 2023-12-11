@@ -78,7 +78,7 @@ async def get_text(tags: str = None, asc: bool = True):
     template = environment.get_template("get_text_where_tags.sql")
     sql = template.render(
         parsed_tags = parse_tags(tags),
-        order = "ASC" if asc else "DESC"
+        asc = asc
         )
 
     # get text
