@@ -8,7 +8,7 @@ from datetime import datetime
 import os
 
 # api
-from fastapi import FastAPI, Request
+from fastapi import BackgroundTasks, FastAPI, Request
 
 # data
 from utils.connection import connection
@@ -38,6 +38,39 @@ def get_now_text():
     '''
     return datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
+def template_execute(path_template: str, **kwargs):
+    '''
+    render template and execute
+    '''
+
+    # render template
+    template = environment.get_template(path_template)
+    sql = template.render(**kwargs)
+
+    # get data
+    with connection() as conn:
+        curs = conn.cursor()
+        curs.execute(sql)
+
+    return 
+
+def template_fetch_one(path_template: str, **kwargs):
+    '''
+    render template and fetch one record
+    '''
+
+    # render template
+    template = environment.get_template(path_template)
+    sql = template.render(**kwargs)
+
+    # get data
+    with connection() as conn:
+        curs = conn.cursor()
+        curs.execute(sql)
+        record = curs.fetchone()
+
+    return record
+
 # jinja
 
 environment = jinja2.Environment(
@@ -66,7 +99,7 @@ async def root():
 ## get
 
 @app.get("/text", tags=["get"])
-def get_text(tags: str = None, asc: bool = True):
+def get_text(background_tasks: BackgroundTasks, tags: str = None, asc: bool = True):
     '''
     get text
 
@@ -74,38 +107,33 @@ def get_text(tags: str = None, asc: bool = True):
     asc: order messages aescending (i.e., True = oldest messages at the top of the queue)
     '''
 
-    # get sql
-    template = environment.get_template("get_text_where_tags.sql")
-    sql = template.render(
+    # get data
+    record = template_fetch_one(
+        "get_text_where_tags.sql",
         parsed_tags = parse_tags(tags),
         asc = asc
         )
 
-    # get text
-    with connection() as conn:
+    # parse
+    
+    # record exists
+    if record:
         
-        # get data
-        curs = conn.cursor()
-        curs.execute(sql)
-        record = curs.fetchone()
-        
-        # if record exists
-        if record:
+        # parse
+        text_id = record[0]
+        text = record[1]
 
-            # parse record
-            text_id = record[0]
-            text = record[1]
-
-            # update dt_requested
-            template = environment.get_template("update_dt_requested.sql")
-            sql = template.render(
-                text_id = text_id,
-                dt_requested = get_now_text()
-                )
-            curs.execute(sql)
-
-        else:
-            text = None
+        # update dt_requested in background task
+        background_tasks.add_task(
+            template_execute,
+            "update_dt_requested.sql",
+            text_id = text_id,
+            dt_requested = get_now_text()
+            )
+    
+    # no record exists
+    else:
+        text = None
 
     return {'text': text}
 
@@ -122,20 +150,15 @@ def put_text(
     add text to database
     '''
 
-    # build sql
-    template = environment.get_template("add_text.sql")
-    sql = template.render(
+    # update dt_requested
+    template_execute(
+        "add_text.sql",
         dt_entered = get_now_text(),
         client_host = request.client.host,
         source = source,
         parsed_tags = parse_tags(tags),
         text = text,
-        )
-
-    # execute
-    with connection() as conn:
-        curs = conn.cursor()
-        curs.execute(sql)
+    )
 
     return
 
