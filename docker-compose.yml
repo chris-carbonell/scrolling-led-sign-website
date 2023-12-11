@@ -55,14 +55,42 @@ services:
       - .env
 
     ports:
-      - 8000:8000
+      - ${PORT_API}:8000
 
     volumes:
       - ./api:/usr/src/api
 
     healthcheck:
-      test: curl http://localhost:8000/healthcheck || exit 1
+      test: curl http://localhost:${PORT_API}/healthcheck || exit 1
       # TODO: can pytest be used here instead?
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+      start_period: 2m
+
+  # # www
+  # fastui frontend
+  www:
+    build: ./www  # build with `docker-compose build`
+    command: uvicorn main:app --host=0.0.0.0 --reload
+
+    container_name: ${PROJECT_NAME}-www
+
+    depends_on:
+      - db
+      - api
+
+    env_file:
+      - .env
+
+    ports:
+      - ${PORT_WWW}:8000
+
+    volumes:
+      - ./api:/usr/src/api
+
+    healthcheck:
+      test: curl http://localhost:${PORT_WWW} || exit 1
       interval: 1m30s
       timeout: 10s
       retries: 3
