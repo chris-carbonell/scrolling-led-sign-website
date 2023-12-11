@@ -38,7 +38,7 @@ def get_now_text():
     '''
     return datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
-def template_execute(path_template: str, **kwargs):
+def template_execute(path_template: str, fetch: str = None, **kwargs):
     '''
     render template and execute
     '''
@@ -52,24 +52,17 @@ def template_execute(path_template: str, **kwargs):
         curs = conn.cursor()
         curs.execute(sql)
 
-    return 
+        # fetch
+        if fetch:
+            if fetch == "fetchone":
+                r = curs.fetchone()
+            elif fetch == "fetchall":
+                r = curs.fetchall()
+            else:
+                raise AttributeError(f"fetch ({fetch}) not supported")
+            return r
 
-def template_fetch_one(path_template: str, **kwargs):
-    '''
-    render template and fetch one record
-    '''
-
-    # render template
-    template = environment.get_template(path_template)
-    sql = template.render(**kwargs)
-
-    # get data
-    with connection() as conn:
-        curs = conn.cursor()
-        curs.execute(sql)
-        record = curs.fetchone()
-
-    return record
+    return
 
 # jinja
 
@@ -108,8 +101,9 @@ def get_text(background_tasks: BackgroundTasks, tags: str = None, asc: bool = Tr
     '''
 
     # get data
-    record = template_fetch_one(
+    record = template_execute(
         "get_text_where_tags.sql",
+        "fetchone",
         parsed_tags = parse_tags(tags),
         asc = asc
         )
@@ -136,6 +130,10 @@ def get_text(background_tasks: BackgroundTasks, tags: str = None, asc: bool = Tr
         text = None
 
     return {'text': text}
+
+@app.get("/texts", tags=["get"])
+def get_texts():
+    return
 
 ## put
 
