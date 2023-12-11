@@ -66,7 +66,7 @@ async def root():
 ## get
 
 @app.get("/text", tags=["get"])
-async def get_text(tags: str = None, asc: bool = True):
+def get_text(tags: str = None, asc: bool = True):
     '''
     get text
 
@@ -112,7 +112,7 @@ async def get_text(tags: str = None, asc: bool = True):
 ## put
 
 @app.put("/text", tags=["put"])
-async def put_text(
+def put_text(
     text: str,
     request: Request,
     source: str = "api",
