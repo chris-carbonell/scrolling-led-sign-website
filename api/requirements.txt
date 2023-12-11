@@ -6,6 +6,7 @@ fastapi
 uvicorn[standard]
 
 # data
+Jinja2
 psycopg2
 
 # tests

@@ -12,6 +12,7 @@ from fastapi import FastAPI, Request
 
 # data
 from utils.connection import connection
+import jinja2
 
 # App
 
@@ -20,19 +21,28 @@ app = FastAPI()
 
 # Helper Funcs
 
-def parse_tags(tags: str):
+def parse_tags(tags: str | None):
     '''
     convert "a,b, c" to "'a', 'b', 'c'"
     for use with ARRAY[]
     '''
-    tags_where = ["'" + tag.strip() + "'" for tag in tags.split(",")]
-    return ', '.join(tags_where)
+    if tags:
+        tags_where = ["'" + tag.strip() + "'" for tag in tags.split(",")]
+        return ', '.join(tags_where)
+    else:
+        return None
 
 def get_now_text():
     '''
     get string of now time
     '''
     return datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+
+# jinja
+
+environment = jinja2.Environment(
+    loader = jinja2.FileSystemLoader("./templates")
+)
 
 # endpoints
 
@@ -65,16 +75,11 @@ async def get_text(tags: str = None, asc: bool = True):
     '''
 
     # get sql
-    sql = "SELECT \n\ttext_id\n\t, text \nFROM texts, UNNEST(text_tags) as tt"
-    sql += "\nWHERE dt_requested IS NULL"
-    if tags:
-        sql += f"\n\tAND tt = ANY(ARRAY[{parse_tags(tags)}])"
-    sql += "\nORDER BY dt_entered"
-    if asc:
-        sql += " ASC"
-    else:
-        sql += " DESC"
-    sql += ";"
+    template = environment.get_template("get_text_where_tags.sql")
+    sql = template.render(
+        parsed_tags = parse_tags(tags),
+        order = "ASC" if asc else "DESC"
+        )
 
     # get text
     with connection() as conn:
@@ -92,7 +97,11 @@ async def get_text(tags: str = None, asc: bool = True):
             text = record[1]
 
             # update dt_requested
-            sql = f"UPDATE texts SET dt_requested = '{get_now_text()}' WHERE text_id = {text_id}"
+            template = environment.get_template("update_dt_requested.sql")
+            sql = template.render(
+                text_id = text_id,
+                dt_requested = get_now_text()
+                )
             curs.execute(sql)
 
         else:
@@ -114,14 +123,14 @@ async def put_text(
     '''
 
     # build sql
-    # TODO: shoudl this be handled by sqlalchemy? pydantic?
-    sql = "INSERT INTO texts (dt_entered, dt_requested, client_host, text_source, text_tags, text) VALUES ("
-    sql += "'" + get_now_text() + "', "  # dt_entered
-    sql += "NULL, "  # dt_requested
-    sql += "'" + request.client.host + "', "  # client_host
-    sql += "'" + source + "', "  # text_source
-    sql += f"ARRAY[{parse_tags(tags)}], " if tags else "NULL, "
-    sql += "'" + text + "');"
+    template = environment.get_template("add_text.sql")
+    sql = template.render(
+        dt_entered = get_now_text(),
+        client_host = request.client.host,
+        source = source,
+        parsed_tags = parse_tags(tags),
+        text = text,
+        )
 
     # execute
     with connection() as conn:

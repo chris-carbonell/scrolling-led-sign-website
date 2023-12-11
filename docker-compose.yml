@@ -62,6 +62,7 @@ services:
 
     healthcheck:
       test: curl http://localhost:8000/healthcheck || exit 1
+      # TODO: can pytest be used here instead?
       interval: 1m30s
       timeout: 10s
       retries: 3
