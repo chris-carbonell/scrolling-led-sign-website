@@ -9,7 +9,7 @@ import os
 
 # pydantic
 from pydantic import BaseModel, Field
-from typing import Annotated
+from typing import Annotated, List
 
 # api
 from fastapi import BackgroundTasks, FastAPI, HTTPException, Request
@@ -26,6 +26,15 @@ from utils.connection import connection
 import jinja2
 
 # Schemas
+
+class TextRecord(BaseModel):
+    # TODO: the table gets Dt Entered, can we control the name of that here somehow?
+    dt_entered: datetime | None
+    dt_requested: datetime | None
+    client_host: str | None
+    text_source: str | None
+    text_tags: List[str] | None
+    text: str
 
 class TextForm(BaseModel):
     text: str
@@ -152,16 +161,16 @@ def get_text(background_tasks: BackgroundTasks, tags: str = None, asc: bool = Tr
 
     return {'text': text}
 
-@app.get("/texts", tags=["api|get"])
-def get_texts():
-    '''
-    get all texts
-    '''
+# @app.get("/texts", tags=["api|get"])
+# def get_texts():
+#     '''
+#     get all texts
+#     '''
 
-    # get data
-    data = template_execute("get_text_all.sql", "fetchall")
+#     # get data
+#     data = template_execute("get_text_all.sql", "fetchall")
 
-    return data
+#     return data
 
 ## put
 
@@ -195,11 +204,28 @@ def api_texts() -> list[AnyComponent]:
     '''
     tabulate text data
     '''
+
+    # get data
+    data = template_execute("get_text_all.sql", "fetchall")
+
+    # parse
+    data = [
+        TextRecord(
+            dt_entered=record[1],
+            dt_requested=record[2],
+            client_host=record[3],
+            text_source=record[4],
+            text_tags=record[5],
+            text=record[6],
+            )
+        for record in data
+    ]
+
     return [
         c.Page(components=[
             c.Heading(text="Send Message to Sign", level=1),
             c.Heading(text="Texts!", level=2),
-            
+            c.Table[TextRecord](data=data),
         ])
     ]
 
