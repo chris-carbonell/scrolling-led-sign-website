@@ -190,8 +190,21 @@ def put_text(
 
 # App
 
+@app.get("/api/texts", response_model=FastUI, response_model_exclude_none=True, tags=["app|get"])
+def api_texts() -> list[AnyComponent]:
+    '''
+    tabulate text data
+    '''
+    return [
+        c.Page(components=[
+            c.Heading(text="Send Message to Sign", level=1),
+            c.Heading(text="Texts!", level=2),
+            
+        ])
+    ]
+
 @app.get("/api/forms/text/success", response_model=FastUI, response_model_exclude_none=True, tags=["app|get"])
-def form_success() -> list[AnyComponent]:
+def api_forms_text_success() -> list[AnyComponent]:
     '''
     when form submitted successfully, show success page
     '''
@@ -211,7 +224,7 @@ def form_success() -> list[AnyComponent]:
     ]
 
 @app.post("/api/forms/text")
-async def post_text(form: Annotated[TextForm, fastui_form(TextForm)]) -> FormResponse:
+async def api_forms_text(form: Annotated[TextForm, fastui_form(TextForm)]) -> FormResponse:
     '''
     when form submitted, add the text to the database
     '''
@@ -232,7 +245,7 @@ async def post_text(form: Annotated[TextForm, fastui_form(TextForm)]) -> FormRes
     return FormResponse(event=GoToEvent(url="/forms/text/success"))
 
 @app.get("/api/", response_model=FastUI, response_model_exclude_none=True, tags=["app|get"])
-def home() -> list[AnyComponent]:
+def api() -> list[AnyComponent]:
     '''
     root page that serves the form
     '''
