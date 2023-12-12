@@ -2,7 +2,6 @@
 
 TAGS_METADATA = [
     # api
-    {"name": "admin", "description": "administrative"},
     {"name": "api", "description": "api (backend)"},
     {"name": "app", "description": "app (frontend)"},
 ]

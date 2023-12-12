@@ -8,7 +8,7 @@ router = APIRouter()
 
 # Endpoints
 
-@router.get("/healthcheck", tags=["api|admin|get"])
+@router.get("/healthcheck")
 async def root():
     '''
     health check for container
