@@ -5,6 +5,7 @@
 
 # general
 from datetime import datetime, date
+from dateutil import tz
 import os
 
 # pydantic
@@ -65,9 +66,32 @@ def parse_tags(tags: str | None):
 
 def get_now_text():
     '''
-    get string of now time
+    get string of now time in UTC
     '''
-    return datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    return datetime.now().strftime("%Y-%m-%d %H:%M:%SZ")  # UTC
+
+def convert_UTC(dt_utc: str | datetime, to_zone="America/Chicago"):
+    '''
+    convert UTC to to_zone
+    https://stackoverflow.com/questions/61831304/utc-to-cst-time-conversion-using-pytz-python-package
+    '''
+
+    # check if None
+    if dt_utc is None:
+        return None
+
+    # parse time
+    if isinstance(dt_utc, str):
+        dt_utc = datetime.strptime(dt_utc, "%Y-%m-%d %H:%M:%SZ")
+
+    # get zones
+    from_zone = tz.gettz("UTC")
+    to_zone = tz.gettz(to_zone)
+
+    # get to_zone dt
+    dt_to_zone = dt_utc.replace(tzinfo=from_zone).astimezone(to_zone)
+
+    return dt_to_zone
 
 def template_execute(path_template: str, fetch: str = None, **kwargs):
     '''
@@ -220,8 +244,8 @@ def api_texts(page: int = 1) -> list[AnyComponent]:
     # parse
     data = [
         TextRecord(
-            dt_entered=record[1],
-            dt_requested=record[2],
+            dt_entered=convert_UTC(record[1]),
+            dt_requested=convert_UTC(record[2]),
             client_host=record[3],
             text_source=record[4],
             text_tags=record[5],
