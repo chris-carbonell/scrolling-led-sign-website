@@ -25,10 +25,16 @@ from fastui.forms import FormResponse, fastui_form
 from utils.connection import connection
 import jinja2
 
+# Constants
+
+HEADER_MAIN = "Scrolling LED Sign"
+HEADER_SUB = "poopasaurus.com"
+
 # Schemas
 
 class TextRecord(BaseModel):
     # TODO: the table gets Dt Entered, can we control the name of that here somehow?
+    # TODO: or maybe with DisplayLookup like in the cities table in the demo
     dt_entered: datetime | None
     dt_requested: datetime | None
     client_host: str | None
@@ -200,10 +206,13 @@ def put_text(
 # App
 
 @app.get("/api/texts", response_model=FastUI, response_model_exclude_none=True, tags=["app|get"])
-def api_texts() -> list[AnyComponent]:
+def api_texts(page: int = 1) -> list[AnyComponent]:
     '''
     tabulate text data
     '''
+
+    # constants
+    page_size = 5
 
     # get data
     data = template_execute("get_text_all.sql", "fetchall")
@@ -223,9 +232,13 @@ def api_texts() -> list[AnyComponent]:
 
     return [
         c.Page(components=[
-            c.Heading(text="Send Message to Sign", level=1),
-            c.Heading(text="Texts!", level=2),
-            c.Table[TextRecord](data=data),
+            c.Heading(text=HEADER_MAIN, level=1),
+            c.Heading(text=HEADER_SUB, level=2),
+
+            c.Heading(text="Texts!", level=3),
+
+            c.Table[TextRecord](data=data[(page - 1) * page_size : page * page_size]),
+            c.Pagination(page=page, page_size=page_size, total=len(data)),
         ])
     ]
 
@@ -236,8 +249,11 @@ def api_forms_text_success() -> list[AnyComponent]:
     '''
     return [
         c.Page(components=[
-            c.Heading(text="Send Message to Sign", level=1),
-            c.Heading(text="Success!", level=2),
+            c.Heading(text=HEADER_MAIN, level=1),
+            c.Heading(text=HEADER_SUB, level=2),
+
+            c.Heading(text="Success!", level=3),
+
             # TODO: get random success gif from giphy
             # c.Image not available in 0.2.0 (https://pypi.org/project/fastui/#history)
             # c.Image(
@@ -245,6 +261,7 @@ def api_forms_text_success() -> list[AnyComponent]:
             #     src="https://cdn.drawception.com/drawings/561178/bTfogBFAxR.png",
             #     height=200,
             # ),
+
             c.Button(text = "Go Back", on_click = GoToEvent(url="/")),
         ])
     ]
@@ -277,7 +294,10 @@ def api() -> list[AnyComponent]:
     '''
     return [
         c.Page(components=[
-            c.Heading(text="Send Message to Sign", level=1),
+            c.Heading(text=HEADER_MAIN, level=1),
+            c.Heading(text=HEADER_SUB, level=2),
+
+            c.Heading(text="Message Form", level=3),
             c.ModelForm[TextForm](submit_url="/api/forms/text"),
         ])
     ]

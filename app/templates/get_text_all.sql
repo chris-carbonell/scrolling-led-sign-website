@@ -4,4 +4,5 @@
 SELECT
     *
 FROM texts
+ORDER BY dt_entered DESC
 ;
