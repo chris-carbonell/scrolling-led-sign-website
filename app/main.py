@@ -34,21 +34,13 @@ from utils.helpers.tags import *
 # App
 
 # app
-app = FastAPI()
+app = FastAPI(
+    openapi_tags=TAGS_METADATA
+)
 
 # endpoints
 
-## metadata
-tags_metadata = [
-    # api
-    {"name": "api|get", "description": "api: get data"},
-    {"name": "api|admin|get", "description": "api: get admin data"},
-    {"name": "api|put", "description": "api: put data"},
-    
-    # app
-    {"name": "app|get", "description": "app: get data"},
-    {"name": "app|post", "description": "app: post data"},
-]
+
 
 ## admin
 
