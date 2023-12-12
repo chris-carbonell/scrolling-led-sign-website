@@ -4,8 +4,6 @@
 # Dependencies
 
 # general
-from datetime import datetime, date
-from dateutil import tz
 import os
 
 # pydantic
@@ -24,92 +22,19 @@ from fastui.events import GoToEvent, BackEvent, PageEvent
 from fastui.forms import FormResponse, fastui_form
 
 # data
-from utils.connection import connection
-import jinja2
+from utils.data import connection, template_execute
 
-# Constants
+# constants
+from constants import *
 
-HEADER_MAIN = "Scrolling LED Sign"
-HEADER_SUB = "poopasaurus.com"
+# helpers
+from utils.helpers.datetime import *
+from utils.helpers.tags import *
 
 # App
 
 # app
 app = FastAPI()
-
-# Helper Funcs
-
-def parse_tags(tags: str | None):
-    '''
-    convert "a,b, c" to "'a', 'b', 'c'"
-    for use with ARRAY[]
-    '''
-    if tags:
-        tags_where = ["'" + tag.strip() + "'" for tag in tags.split(",")]
-        return ", ".join(tags_where)
-    else:
-        return None
-
-def get_now_text():
-    '''
-    get string of now time in UTC
-    '''
-    return datetime.now().strftime("%Y-%m-%d %H:%M:%SZ")  # UTC
-
-def convert_UTC(dt_utc: str | datetime, to_zone="America/Chicago"):
-    '''
-    convert UTC to to_zone
-    https://stackoverflow.com/questions/61831304/utc-to-cst-time-conversion-using-pytz-python-package
-    '''
-
-    # check if None
-    if dt_utc is None:
-        return None
-
-    # parse time
-    if isinstance(dt_utc, str):
-        dt_utc = datetime.strptime(dt_utc, "%Y-%m-%d %H:%M:%SZ")
-
-    # get zones
-    from_zone = tz.gettz("UTC")
-    to_zone = tz.gettz(to_zone)
-
-    # get to_zone dt
-    dt_to_zone = dt_utc.replace(tzinfo=from_zone).astimezone(to_zone)
-
-    return dt_to_zone
-
-def template_execute(path_template: str, fetch: str = None, **kwargs):
-    '''
-    render template and execute
-    '''
-
-    # render template
-    template = environment.get_template(path_template)
-    sql = template.render(**kwargs)
-
-    # get data
-    with connection() as conn:
-        curs = conn.cursor()
-        curs.execute(sql)
-
-        # fetch
-        if fetch:
-            if fetch == "fetchone":
-                r = curs.fetchone()
-            elif fetch == "fetchall":
-                r = curs.fetchall()
-            else:
-                raise AttributeError(f"fetch ({fetch}) not supported")
-            return r
-
-    return
-
-# jinja
-
-environment = jinja2.Environment(
-    loader = jinja2.FileSystemLoader("./templates")
-)
 
 # endpoints
 
