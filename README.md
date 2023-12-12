@@ -22,3 +22,4 @@ frontend app to control my DIY scrolling LED sign
             * cool search bar
         * https://codepen.io/eyesight/pen/KGEebY
             * send button goes to done goes back to send using JS
+* fastui tutorial with form<br>https://www.youtube.com/watch?v=eBWrnSyN2iw

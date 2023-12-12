@@ -72,5 +72,7 @@ def user_profile(user_id: int) -> list[AnyComponent]:
 
 @app.get('/{path:path}')
 async def html_landing() -> HTMLResponse:
-    """Simple HTML page which serves the React app, comes last as it matches all paths."""
+    '''
+    Simple HTML page which serves the React app, comes last as it matches all paths.
+    '''
     return HTMLResponse(prebuilt_html(title='FastUI Demo'))

@@ -10,8 +10,8 @@ RUN apt-get install -y curl # for health check
 RUN apt-get install -y libpq-dev gcc
 
 # set up working dir
-RUN mkdir /usr/src/api
-WORKDIR /usr/src/api
+RUN mkdir /usr/src/app
+WORKDIR /usr/src/app
 
 # install requirements
 COPY ./requirements.txt .

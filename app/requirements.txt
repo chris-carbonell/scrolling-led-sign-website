@@ -1,8 +1,10 @@
 # general
 requests
 
-# api
+# app
 fastapi
+fastui
+python-multipart
 uvicorn[standard]
 
 # data

@@ -13,7 +13,13 @@ VALUES (
     '{{ dt_entered }}',
     '{{ client_host }}',
     '{{ text_source }}',
-    ARRAY[{{ parsed_tags }}],
+
+    {% if parsed_tags is not none %}
+        ARRAY[{{ parsed_tags }}],
+    {% else %}
+        NULL,
+    {% endif %}
+
     '{{ text }}'
 )
 ;

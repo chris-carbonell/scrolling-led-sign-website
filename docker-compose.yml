@@ -40,13 +40,13 @@ services:
       timeout: 3s
       retries: 3
 
-  # # api
-  # fastapi backend for interacting with database
-  api:
-    build: ./api  # build with `docker-compose build`
+  # # app
+  # fastui frontend and fastapi backend for interacting with database
+  app:
+    build: ./app  # build with `docker-compose build`
     command: uvicorn main:app --host=0.0.0.0 --reload
 
-    container_name: ${PROJECT_NAME}-api
+    container_name: ${PROJECT_NAME}-app
 
     depends_on:
       - db
@@ -55,42 +55,14 @@ services:
       - .env
 
     ports:
-      - ${PORT_API}:8000
+      - ${PORT_APP}:8000
 
     volumes:
-      - ./api:/usr/src/api
+      - ./app:/usr/src/app
 
     healthcheck:
-      test: curl http://localhost:${PORT_API}/healthcheck || exit 1
+      test: curl http://localhost:${PORT_APP}/healthcheck || exit 1
       # TODO: can pytest be used here instead?
-      interval: 1m30s
-      timeout: 10s
-      retries: 3
-      start_period: 2m
-
-  # # www
-  # fastui frontend
-  www:
-    build: ./www  # build with `docker-compose build`
-    command: uvicorn main:app --host=0.0.0.0 --reload
-
-    container_name: ${PROJECT_NAME}-www
-
-    depends_on:
-      - db
-      - api
-
-    env_file:
-      - .env
-
-    ports:
-      - ${PORT_WWW}:8000
-
-    volumes:
-      - ./api:/usr/src/api
-
-    healthcheck:
-      test: curl http://localhost:${PORT_WWW} || exit 1
       interval: 1m30s
       timeout: 10s
       retries: 3
