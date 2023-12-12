@@ -3,7 +3,7 @@
 TAGS_METADATA = [
     # api
     {"name": "api", "description": "api (backend)"},
-    {"name": "app", "description": "app (frontend)"},
+    {"name": "www", "description": "app (frontend)"},
 ]
 
 # app
