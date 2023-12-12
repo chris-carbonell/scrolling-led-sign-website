@@ -1,10 +1,6 @@
 # # Overview
 # set up website, database, and API
 
-# # Todo
-# * add python api to pull from and update database
-# * add fastui website to add to database
-
 version: '3.7'
 
 name: ${PROJECT_NAME}  # project name (aka stack)
