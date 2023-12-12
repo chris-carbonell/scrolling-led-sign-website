@@ -18,7 +18,7 @@ router = APIRouter()
 
 ## get
 
-@router.get("/text")
+@router.get("/text", name="get text from database")
 def get_text(background_tasks: BackgroundTasks, tags: str = None, asc: bool = True):
     '''
     get text
@@ -60,7 +60,7 @@ def get_text(background_tasks: BackgroundTasks, tags: str = None, asc: bool = Tr
 
 ## put
 
-@router.put("/text")
+@router.put("/text", name="add text to the database")
 def put_text(
     text: str,
     request: Request,
@@ -68,7 +68,7 @@ def put_text(
     tags: str = None,
     ):
     '''
-    add text to database
+    add text to the database
     '''
 
     # update dt_requested

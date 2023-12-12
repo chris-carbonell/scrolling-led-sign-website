@@ -30,7 +30,7 @@ router = APIRouter()
 
 # Endpoints
 
-@router.get("/api/texts", response_model=FastUI, response_model_exclude_none=True)
+@router.get("/api/texts", response_model=FastUI, response_model_exclude_none=True, name="tabulate text data")
 def api_texts(page: int = 1) -> list[AnyComponent]:
     '''
     tabulate text data
@@ -67,7 +67,7 @@ def api_texts(page: int = 1) -> list[AnyComponent]:
         ])
     ]
 
-@router.get("/api/forms/text/success", response_model=FastUI, response_model_exclude_none=True)
+@router.get("/api/forms/text/success", response_model=FastUI, response_model_exclude_none=True, name="text form success")
 def api_forms_text_success() -> list[AnyComponent]:
     '''
     when form submitted successfully, show success page
@@ -91,7 +91,7 @@ def api_forms_text_success() -> list[AnyComponent]:
         ])
     ]
 
-@router.post("/api/forms/text")
+@router.post("/api/forms/text", name="submit text to the database")
 async def api_forms_text(form: Annotated[TextForm, fastui_form(TextForm)]) -> FormResponse:
     '''
     when form submitted, add the text to the database
@@ -112,7 +112,7 @@ async def api_forms_text(form: Annotated[TextForm, fastui_form(TextForm)]) -> Fo
 
     return FormResponse(event=GoToEvent(url="/forms/text/success"))
 
-@router.get("/api/", response_model=FastUI, response_model_exclude_none=True)
+@router.get("/api/", response_model=FastUI, response_model_exclude_none=True, name="form")
 def api() -> list[AnyComponent]:
     '''
     root page that serves the form
@@ -127,7 +127,7 @@ def api() -> list[AnyComponent]:
         ])
     ]
 
-@router.get("/{path:path}")
+@router.get("/{path:path}", name="html landing helper")
 async def html_landing() -> HTMLResponse:
     '''
     simple HTML page which serves the React app
