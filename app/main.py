@@ -102,17 +102,6 @@ def get_text(background_tasks: BackgroundTasks, tags: str = None, asc: bool = Tr
 
     return {'text': text}
 
-# @app.get("/texts", tags=["api|get"])
-# def get_texts():
-#     '''
-#     get all texts
-#     '''
-
-#     # get data
-#     data = template_execute("get_text_all.sql", "fetchall")
-
-#     return data
-
 ## put
 
 @app.put("/text", tags=["api|put"])
