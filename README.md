@@ -1,5 +1,5 @@
 # Website for Scrolling LED Sign
-frontend app to control my DIY scrolling LED sign
+frontend/backend app to control my DIY scrolling LED sign
 
 # Goals
 * users can submit text to scroll
@@ -9,17 +9,5 @@ frontend app to control my DIY scrolling LED sign
     * app should be available at `localhost:8000`
 
 # Resources
-* sample flask app<br>https://github.com/docker/awesome-compose/tree/master/flask
-* getting user text<br>https://stackoverflow.com/questions/12277933/send-data-from-a-textbox-into-flask
-* form template<br>https://freefrontend.com/css-input-text/
-    * favorites
-        * https://codepen.io/bertdida/pen/xyPKRX
-            * I used an online compiler to get the CSS from the SCSS
-        * https://codepen.io/aaroniker/pen/dybMVMB
-        * https://codepen.io/vineethtrv/pen/ZBpebQ
-            * one liner sign up that cycles back to start
-        * https://codepen.io/chouaibblgn45/pen/rzewrO
-            * cool search bar
-        * https://codepen.io/eyesight/pen/KGEebY
-            * send button goes to done goes back to send using JS
 * fastui tutorial with form<br>https://www.youtube.com/watch?v=eBWrnSyN2iw
+* organizing bigger fastapi projects<br>https://stackoverflow.com/questions/70118412/keeping-endpoint-function-declarations-in-separate-modules-with-fastapi
