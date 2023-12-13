@@ -36,6 +36,9 @@ services:
       timeout: 3s
       retries: 3
 
+    networks:
+      - sls
+
   # # app
   # fastui frontend and fastapi backend for interacting with database
   app:
@@ -63,3 +66,36 @@ services:
       timeout: 10s
       retries: 3
       start_period: 2m
+
+    networks:
+      - sls
+      - web
+
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=web"
+      
+      # routers
+
+      ## http
+      - "traefik.http.routers.scrolling-led-sign.entrypoints=web"
+      - "traefik.http.routers.scrolling-led-sign.rule=Host(`www.poopasaurus.com`)"
+
+      ## https
+      - "traefik.http.routers.scrolling-led-sign-secure.entrypoints=websecure"
+      - "traefik.http.routers.scrolling-led-sign-secure.rule=Host(`www.poopasaurus.com`)"
+      - "traefik.http.routers.scrolling-led-sign-secure.tls=true"
+      - "traefik.http.routers.scrolling-led-sign-secure.tls.certresolver=cloudflare"
+      - "traefik.http.routers.scrolling-led-sign-secure.service=scrolling-led-sign"
+
+      # middlewares
+      - "traefik.http.routers.scrolling-led-sign.middlewares=https-redirect@file"
+
+      # services
+      - "traefik.http.services.scrolling-led-sign.loadbalancer.server.scheme=https" 
+      - "traefik.http.services.scrolling-led-sign.loadbalancer.server.port=8001"
+
+networks:
+  sls:
+  web:
+    external: true
