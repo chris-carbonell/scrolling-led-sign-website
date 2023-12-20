@@ -8,6 +8,7 @@ FROM python:3.11-slim
 RUN apt-get update
 RUN apt-get install -y curl # for health check
 RUN apt-get install -y libpq-dev gcc
+RUN pip install --upgrade pip
 
 # set up working dir
 RUN mkdir /usr/src/app

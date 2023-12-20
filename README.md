@@ -18,3 +18,6 @@ frontend/backend app to control my DIY scrolling LED sign
 # Resources
 * fastui tutorial with form<br>https://www.youtube.com/watch?v=eBWrnSyN2iw
 * organizing bigger fastapi projects<br>https://stackoverflow.com/questions/70118412/keeping-endpoint-function-declarations-in-separate-modules-with-fastapi
+* tutorial with better base image<br>https://testdriven.io/blog/fastapi-docker-traefik/
+* fastapi CORS issues<br>https://github.com/AUTOMATIC1111/stable-diffusion-webui/issues/7759
+    * but there are dependency conflicts due to `fastui` and `pydantic`
