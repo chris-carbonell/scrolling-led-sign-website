@@ -88,6 +88,7 @@ services:
 
       # middlewares
       - "traefik.http.routers.scrolling-led-sign.middlewares=https-redirect@file"
+      - "traefik.http.routers.scrolling-led-sign.middlewares=testHeader@file"
 
       # services
       - "traefik.http.services.scrolling-led-sign.loadbalancer.server.scheme=https" 
