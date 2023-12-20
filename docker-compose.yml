@@ -43,7 +43,7 @@ services:
   # fastui frontend and fastapi backend for interacting with database
   app:
     build: ./app  # build with `docker-compose build`
-    command: uvicorn main:app --host=0.0.0.0 --reload
+    # command: uvicorn main:app --host=0.0.0.0 --reload
 
     container_name: ${PROJECT_NAME}-app
 
@@ -55,9 +55,6 @@ services:
 
     ports:
       - ${PORT_APP}:8000
-
-    volumes:
-      - ./app:/usr/src/app
 
     healthcheck:
       test: curl http://localhost:${PORT_APP}/healthcheck || exit 1
@@ -71,29 +68,29 @@ services:
       - sls
       - web
 
-    labels:
-      - "traefik.enable=true"
-      - "traefik.docker.network=web"
+    # labels:
+    #   - "traefik.enable=true"
+    #   - "traefik.docker.network=web"
       
-      # routers
+    #   # routers
 
-      ## http
-      - "traefik.http.routers.scrolling-led-sign.entrypoints=web"
-      - "traefik.http.routers.scrolling-led-sign.rule=Host(`www.${DOMAIN}`)"
+    #   ## http
+    #   - "traefik.http.routers.scrolling-led-sign.entrypoints=web"
+    #   - "traefik.http.routers.scrolling-led-sign.rule=Host(`${DOMAIN}`) || Host(`www.${DOMAIN}`)"
 
-      ## https
-      - "traefik.http.routers.scrolling-led-sign-secure.entrypoints=websecure"
-      - "traefik.http.routers.scrolling-led-sign-secure.rule=Host(`www.${DOMAIN}`)"
-      - "traefik.http.routers.scrolling-led-sign-secure.tls=true"
-      - "traefik.http.routers.scrolling-led-sign-secure.tls.certresolver=cloudflare"
-      - "traefik.http.routers.scrolling-led-sign-secure.service=scrolling-led-sign"
+    #   ## https
+    #   - "traefik.http.routers.scrolling-led-sign-secure.entrypoints=websecure"
+    #   - "traefik.http.routers.scrolling-led-sign-secure.rule=Host(`${DOMAIN}`) || Host(`www.${DOMAIN}`)"
+    #   - "traefik.http.routers.scrolling-led-sign-secure.tls=true"
+    #   - "traefik.http.routers.scrolling-led-sign-secure.tls.certresolver=cloudflare"
+    #   - "traefik.http.routers.scrolling-led-sign-secure.service=scrolling-led-sign"
 
-      # middlewares
-      - "traefik.http.routers.scrolling-led-sign.middlewares=https-redirect@file"
+    #   # middlewares
+    #   - "traefik.http.routers.scrolling-led-sign.middlewares=https-redirect@file"
 
-      # services
-      - "traefik.http.services.scrolling-led-sign.loadbalancer.server.scheme=https" 
-      - "traefik.http.services.scrolling-led-sign.loadbalancer.server.port=8001"
+    #   # services
+    #   - "traefik.http.services.scrolling-led-sign.loadbalancer.server.scheme=https" 
+    #   - "traefik.http.services.scrolling-led-sign.loadbalancer.server.port=8000"
 
 networks:
   sls:
