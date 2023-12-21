@@ -21,4 +21,4 @@ RUN pip install -r requirements.txt
 # copy everything
 COPY . .
 
-CMD ["uvicorn", "main:app", "--host=0.0.0.0", "--reload"]
+CMD ["uvicorn", "main:app", "--host=0.0.0.0", "--log-config=log_conf.yaml", "--reload"]

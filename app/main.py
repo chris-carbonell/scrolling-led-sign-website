@@ -4,6 +4,7 @@
 # Dependencies
 
 # general
+import logging
 import os
 
 # api
@@ -14,6 +15,9 @@ from www import www
 
 # constants
 from constants import TAGS_METADATA
+
+# Logging
+logger = logging.getLogger(__name__)
 
 # App
 app = FastAPI(
