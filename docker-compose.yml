@@ -39,13 +39,12 @@ services:
     networks:
       - sls
 
-  # # app
-  # fastui frontend and fastapi backend for interacting with database
-  app:
-    build: ./app  # build with `docker-compose build`
-    # command: uvicorn main:app --host=0.0.0.0 --reload
+  # # api
+  # fastapi backend for interacting with database
+  api:
+    build: ./api  # build with `docker-compose build`
 
-    container_name: ${PROJECT_NAME}-app
+    container_name: ${PROJECT_NAME}-api
 
     depends_on:
       - db
@@ -54,7 +53,7 @@ services:
       - .env
 
     ports:
-      - ${PORT_APP}:8000
+      - ${PORT_API}:8000
 
     # TODO: fix the health check (it was preventing Treafik from processing the labels)
     # healthcheck:
@@ -64,6 +63,27 @@ services:
     #   timeout: 10s
     #   retries: 3
     #   start_period: 2m
+
+    networks:
+      - sls
+      - web
+
+  # # app
+  # streamlit frontend for interacting with database
+  app:
+    build: ./app  # build with `docker-compose build`
+
+    container_name: ${PROJECT_NAME}-app
+
+    depends_on:
+      - db
+      - api
+
+    env_file:
+      - .env
+
+    ports:
+      - ${PORT_APP}:8501
 
     networks:
       - sls
@@ -87,12 +107,11 @@ services:
       - "traefik.http.routers.scrolling-led-sign-secure.service=scrolling-led-sign"
 
       # middlewares
-      - "traefik.http.routers.scrolling-led-sign.middlewares=https-redirect@file,testHeader@file"
-      - "traefik.http.routers.scrolling-led-sign-secure.middlewares=testHeader@file"
+      - "traefik.http.routers.scrolling-led-sign.middlewares=https-redirect@file"
 
       # services
       - "traefik.http.services.scrolling-led-sign.loadbalancer.server.scheme=https" 
-      - "traefik.http.services.scrolling-led-sign.loadbalancer.server.port=8000"
+      - "traefik.http.services.scrolling-led-sign.loadbalancer.server.port=8501"
 
 networks:
   sls:
