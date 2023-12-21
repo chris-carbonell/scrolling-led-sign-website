@@ -102,8 +102,8 @@ services:
       ## https
       - "traefik.http.routers.scrolling-led-sign-secure.entrypoints=websecure"
       - "traefik.http.routers.scrolling-led-sign-secure.rule=Host(`${DOMAIN}`) || Host(`www.${DOMAIN}`)"
-      # - "traefik.http.routers.scrolling-led-sign-secure.tls=true"
-      # - "traefik.http.routers.scrolling-led-sign-secure.tls.certresolver=cloudflare"
+      - "traefik.http.routers.scrolling-led-sign-secure.tls=true"
+      - "traefik.http.routers.scrolling-led-sign-secure.tls.certresolver=cloudflare"
       - "traefik.http.routers.scrolling-led-sign-secure.service=scrolling-led-sign"
 
       # middlewares
