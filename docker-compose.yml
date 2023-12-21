@@ -87,8 +87,8 @@ services:
       - "traefik.http.routers.scrolling-led-sign-secure.service=scrolling-led-sign"
 
       # middlewares
-      - "traefik.http.routers.scrolling-led-sign.middlewares=https-redirect@file,default-headers@file"
-      - "traefik.http.routers.scrolling-led-sign-secure.middlewares=default-headers@file"
+      - "traefik.http.routers.scrolling-led-sign.middlewares=https-redirect@file,testHeader@file"
+      - "traefik.http.routers.scrolling-led-sign-secure.middlewares=testHeader@file"
 
       # services
       - "traefik.http.services.scrolling-led-sign.loadbalancer.server.scheme=https" 

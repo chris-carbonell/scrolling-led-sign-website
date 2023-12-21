@@ -3,18 +3,43 @@
 
 # Dependencies
 
+# general
+import logging
+import os
+
 # api
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from api import admin, api
 from www import www
 
 # constants
 from constants import TAGS_METADATA
 
+# Logging
+logger = logging.getLogger(__name__)
+
 # App
 app = FastAPI(
     openapi_tags=TAGS_METADATA
 )
+
+# CORS
+# domain = os.environ['DOMAIN']
+# origins = [
+#     f"http://{domain}",
+#     f"https://{domain}",
+# ]
+app.add_middleware(
+    CORSMiddleware,
+    # allow_origins=origins,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+# Routers
 app.include_router(admin.router, include_in_schema=False)
 app.include_router(api.router, tags=["api"])
 app.include_router(www.router, tags=["www"])
