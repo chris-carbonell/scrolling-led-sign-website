@@ -12,7 +12,6 @@ from fastapi import FastAPI
 from fastapi.responses import RedirectResponse
 from fastapi.middleware.cors import CORSMiddleware
 from api import admin, api
-from www import app
 
 # constants
 from constants import TAGS_METADATA
