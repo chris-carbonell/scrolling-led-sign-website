@@ -22,3 +22,4 @@ frontend/backend app to control my DIY scrolling LED sign
 * fastapi CORS issues<br>https://github.com/AUTOMATIC1111/stable-diffusion-webui/issues/7759
     * but there are dependency conflicts due to `fastui` and `pydantic`
 * more details in logging<br>https://gist.github.com/liviaerxin/d320e33cbcddcc5df76dd92948e5be3b
+* streamlit + fastapi tutorial<br>https://medium.com/codex/streamlit-fastapi-%EF%B8%8F-the-ingredients-you-need-for-your-next-data-science-recipe-ffbeb5f76a92
