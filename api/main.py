@@ -10,7 +10,6 @@ import os
 # api
 from fastapi import FastAPI
 from fastapi.responses import RedirectResponse
-from fastapi.middleware.cors import CORSMiddleware
 from api import admin, api
 
 # constants
@@ -22,21 +21,6 @@ logger = logging.getLogger(__name__)
 # App
 app = FastAPI(
     openapi_tags=TAGS_METADATA
-)
-
-# CORS
-# domain = os.environ['DOMAIN']
-# origins = [
-#     f"http://{domain}",
-#     f"https://{domain}",
-# ]
-app.add_middleware(
-    CORSMiddleware,
-    # allow_origins=origins,
-    allow_origins=["*"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
 )
 
 # Routers
