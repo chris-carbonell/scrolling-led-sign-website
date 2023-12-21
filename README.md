@@ -21,3 +21,4 @@ frontend/backend app to control my DIY scrolling LED sign
 * tutorial with better base image<br>https://testdriven.io/blog/fastapi-docker-traefik/
 * fastapi CORS issues<br>https://github.com/AUTOMATIC1111/stable-diffusion-webui/issues/7759
     * but there are dependency conflicts due to `fastui` and `pydantic`
+* more details in logging<br>https://gist.github.com/liviaerxin/d320e33cbcddcc5df76dd92948e5be3b
