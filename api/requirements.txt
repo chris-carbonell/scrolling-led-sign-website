@@ -2,10 +2,8 @@
 python-dateutil
 requests
 
-# app
+# api
 fastapi
-fastui
-python-multipart
 uvicorn[standard]
 
 # data
