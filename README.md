@@ -20,3 +20,4 @@ frontend/backend app to control my DIY scrolling LED sign
 * organizing bigger fastapi projects<br>https://stackoverflow.com/questions/70118412/keeping-endpoint-function-declarations-in-separate-modules-with-fastapi
 * more details in logging<br>https://gist.github.com/liviaerxin/d320e33cbcddcc5df76dd92948e5be3b
 * streamlit + fastapi tutorial<br>https://medium.com/codex/streamlit-fastapi-%EF%B8%8F-the-ingredients-you-need-for-your-next-data-science-recipe-ffbeb5f76a92
+* streamlit + traefik repo<br>https://github.com/joeychrys/streamlit_deployment
