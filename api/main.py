@@ -9,6 +9,7 @@ import os
 
 # api
 from fastapi import FastAPI
+from fastapi.responses import RedirectResponse
 from fastapi.middleware.cors import CORSMiddleware
 from api import admin, api
 from www import app
@@ -42,3 +43,9 @@ app.add_middleware(
 # Routers
 app.include_router(admin.router, include_in_schema=False)
 app.include_router(api.router, tags=["api"])
+
+# Endpoints
+
+@app.get("/")
+async def docs_redirect():
+    return RedirectResponse(url='/docs')
