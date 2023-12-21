@@ -8,14 +8,7 @@ EXPOSE 8501
 
 # setup streamlit
 RUN mkdir -p /root/.streamlit
-RUN bash -c 'echo -e "\
-[general]\n\
-email = \"\"\n\
-" > /root/.streamlit/credentials.toml'
-RUN bash -c 'echo -e "\
-[server]\n\
-enableCORS = false\n\
-" > /root/.streamlit/config.toml'
+COPY config.toml /root/.streamlit/config.toml
 
 # install dependencies
 RUN apt-get update
@@ -29,7 +22,7 @@ WORKDIR /usr/src/app
 COPY ./requirements.txt .
 RUN pip install -r requirements.txt
 
-# copy everything
-COPY . .
+# copy app
+COPY app.py .
 
 CMD ["streamlit", "run", "app.py"]
