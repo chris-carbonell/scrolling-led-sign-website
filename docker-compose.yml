@@ -112,7 +112,7 @@ services:
       # - "traefik.http.routers.scrolling-led-sign-secure.middlewares=secure-headers@file"
 
       # # services
-      # - "traefik.http.services.scrolling-led-sign.loadbalancer.server.scheme=https" 
+      # - "traefik.http.services.scrolling-led-sign.loadbalancer.server.scheme=https"  # cloudflare gateway time-out
       - "traefik.http.services.scrolling-led-sign.loadbalancer.server.port=8501"
 
 networks:
