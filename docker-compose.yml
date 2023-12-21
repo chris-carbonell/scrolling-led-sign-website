@@ -100,16 +100,16 @@ services:
       - "traefik.http.routers.scrolling-led-sign.rule=Host(`${DOMAIN}`) || Host(`www.${DOMAIN}`)"
 
       ## https
-      # - "traefik.http.routers.scrolling-led-sign-secure.entrypoints=websecure"
-      # - "traefik.http.routers.scrolling-led-sign-secure.rule=Host(`${DOMAIN}`) || Host(`www.${DOMAIN}`)"
+      - "traefik.http.routers.scrolling-led-sign-secure.entrypoints=websecure"
+      - "traefik.http.routers.scrolling-led-sign-secure.rule=Host(`${DOMAIN}`) || Host(`www.${DOMAIN}`)"
       # - "traefik.http.routers.scrolling-led-sign-secure.tls=true"
       # - "traefik.http.routers.scrolling-led-sign-secure.tls.certresolver=cloudflare"
-      # - "traefik.http.routers.scrolling-led-sign-secure.service=scrolling-led-sign"
+      - "traefik.http.routers.scrolling-led-sign-secure.service=scrolling-led-sign"
 
-      # # middlewares
-      # - "traefik.http.routers.scrolling-led-sign.middlewares=https-redirect@file"
-      # # - "traefik.http.routers.scrolling-led-sign-secure.middlewares=csrf@file"
-      # # - "traefik.http.routers.scrolling-led-sign-secure.middlewares=secure-headers@file"
+      # middlewares
+      - "traefik.http.routers.scrolling-led-sign.middlewares=https-redirect@file"
+      # - "traefik.http.routers.scrolling-led-sign-secure.middlewares=csrf@file"
+      # - "traefik.http.routers.scrolling-led-sign-secure.middlewares=secure-headers@file"
 
       # # services
       # - "traefik.http.services.scrolling-led-sign.loadbalancer.server.scheme=https" 
