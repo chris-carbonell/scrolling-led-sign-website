@@ -5,11 +5,11 @@ frontend/backend app to control my DIY scrolling LED sign
 * users can submit text to scroll
 
 # Quickstart
-* `docker-compose up -d`
+* `docker-compose up -d --build`
     * app should be available at `localhost:8000`
 
 # Highlights
-* fastui frontend with fastapi backend
+* streamlit frontend with fastapi backend
 * pytest
 * jinja templates for SQL data pulls (incl. conditonal logic)
 * overwrite fastapi title casing in endpoint names
