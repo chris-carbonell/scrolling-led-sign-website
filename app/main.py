@@ -11,7 +11,7 @@ import os
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from api import admin, api
-from www import www
+from www import app
 
 # constants
 from constants import TAGS_METADATA
@@ -42,4 +42,3 @@ app.add_middleware(
 # Routers
 app.include_router(admin.router, include_in_schema=False)
 app.include_router(api.router, tags=["api"])
-app.include_router(www.router, tags=["www"])
