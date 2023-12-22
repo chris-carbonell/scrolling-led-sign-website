@@ -21,3 +21,4 @@ frontend/backend app to control my DIY scrolling LED sign
 * more details in logging<br>https://gist.github.com/liviaerxin/d320e33cbcddcc5df76dd92948e5be3b
 * streamlit + fastapi tutorial<br>https://medium.com/codex/streamlit-fastapi-%EF%B8%8F-the-ingredients-you-need-for-your-next-data-science-recipe-ffbeb5f76a92
 * streamlit + traefik repo<br>https://github.com/joeychrys/streamlit_deployment
+* requests between containers<br>https://stackoverflow.com/questions/50040023/containers-communication-with-python-requests
