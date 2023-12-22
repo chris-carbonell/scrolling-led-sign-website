@@ -3,21 +3,50 @@
 
 WITH
 
-    -- matches
-    -- get text_id that matches tags
-    matches AS (
-        SELECT DISTINCT
-            text_id
-            , dt_entered
-            , text
+	-- tags
+    -- unnest tags
+    -- texts with NULL tags will not survive the CROSS JOIN
+    tags AS (
+		SELECT
+			t.text_id
+			, tag
+		from texts t
+		CROSS JOIN UNNEST(text_tags) AS tag
+	)
+	
+	-- texts_tagged
+    -- join unnested tags back onto texts
+    -- so we can re-include texts with NULL tags
+    , texts_tagged AS (
+		SELECT
+			texts.*
+			, tags.tag
+		FROM texts
+		LEFT JOIN tags
+		ON texts.text_id = tags.text_id
+	)
+	
+	-- matches
+    -- apply conditions
+    , matches AS (
+		SELECT DISTINCT
+			t.text_id
+		
+		FROM texts_tagged t
+		
+        WHERE 1 = 1
 
-        FROM texts
-        CROSS JOIN UNNEST(text_tags) AS tt
+        {% if requested == true %}
+            AND t.dt_requested IS NOT NULL  -- requested already
+        {% elif requested == false %}
+            AND t.dt_requested IS NULL  -- not requested yet
+        {% else %}
+        {% endif %}
 
         {% if parsed_tags is not none %}
-            WHERE tt = ANY(ARRAY[{{ parsed_tags }}])
+            AND tag = ANY(ARRAY[{{ parsed_tags }}])
         {% endif %}
-    )
+	)
 
 SELECT
     t.*
@@ -27,7 +56,7 @@ FROM texts t
 INNER JOIN matches m
 ON t.text_id = m.text_id
 
-ORDER BY dt_entered {{ 'ASC' if asc == true else 'DESC' }}
+ORDER BY t.dt_entered {{ 'ASC' if asc == true else 'DESC' }}
 
-LIMIT {{ limit if limit is not none else 'ALL' }}
+LIMIT {{ 'ALL' if limit is none else limit }}
 ;
