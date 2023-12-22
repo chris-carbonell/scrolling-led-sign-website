@@ -39,7 +39,7 @@ class connection(psycopg2._psycopg.connection):
 
 # Funcs
 
-def template_execute(path_template: str, fetch: str = None, **kwargs):
+def template_execute(path_template: str, **kwargs):
     '''
     render template and execute
     '''
@@ -52,6 +52,11 @@ def template_execute(path_template: str, fetch: str = None, **kwargs):
     with connection() as conn:
         curs = conn.cursor()
         curs.execute(sql)
+        
+        # fetch if exists
+        if curs.description:
+            r = curs.fetchall()  # list of tups
+            column_names = [desc[0] for desc in curs.description]
 
         # fetch
         if fetch:
