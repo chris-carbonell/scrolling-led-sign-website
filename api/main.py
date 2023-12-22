@@ -1,5 +1,5 @@
 # # Overview
-# frontend/backend for interacting with database
+# backend for interacting with database
 
 # Dependencies
 
