@@ -23,5 +23,18 @@ with st.form("my_form", clear_on_submit=True):
     submitted = st.form_submit_button("Submit")
 
 # process
-r = requests.get(URL_API + "/text")
-st.write(r.json())
+
+if submitted:
+
+    ## post
+    r = requests.put(URL_API + "/text", params = {'text': text})
+
+    ## get
+    params = {
+        'requested': False,
+        'asc': False,
+        'limit': 10
+    }
+    r = requests.get(URL_API + "/texts", params = params)
+    st.write(r.url)
+    st.write(r.json())
