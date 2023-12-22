@@ -23,6 +23,7 @@ COPY ./requirements.txt .
 RUN pip install -r requirements.txt
 
 # copy app
+COPY constants.py .
 COPY app.py .
 
 CMD ["streamlit", "run", "app.py"]
