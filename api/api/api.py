@@ -58,6 +58,26 @@ def get_text(background_tasks: BackgroundTasks, tags: str = None, asc: bool = Tr
 
     return {'text': text}
 
+@router.get("/texts", name="get all texts from the database")
+def get_texts(tags: str = None, asc: bool = True, limit: int = None):
+    '''
+    get all texts
+
+    tags: tags of the text to get; string of comma-separated tags (e.g., "sports, random")
+    asc: order messages aescending (i.e., True = oldest messages at the top of the queue)
+    '''
+
+    # get data
+    data = template_execute(
+        "get_text_all.sql",
+        "fetchall",
+        parsed_tags = parse_tags(tags),
+        asc = asc,
+        limit = limit
+        )
+
+    return data
+
 ## put
 
 @router.put("/text", name="add text to the database")
