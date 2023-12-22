@@ -59,7 +59,7 @@ def get_text(background_tasks: BackgroundTasks, tags: str = None, asc: bool = Tr
     return {'text': text}
 
 @router.get("/texts", name="get all texts from the database")
-def get_texts(tags: str = None, asc: bool = True, limit: int = None):
+def get_texts(requested: bool = None, tags: str = None, asc: bool = True, limit: int = None):
     '''
     get all texts
 
@@ -70,7 +70,7 @@ def get_texts(tags: str = None, asc: bool = True, limit: int = None):
     # get data
     data = template_execute(
         "get_text_all.sql",
-        "fetchall",
+        requested = requested,
         parsed_tags = parse_tags(tags),
         asc = asc,
         limit = limit
