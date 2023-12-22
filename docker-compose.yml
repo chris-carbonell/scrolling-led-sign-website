@@ -47,7 +47,8 @@ services:
     container_name: ${PROJECT_NAME}-api
 
     depends_on:
-      - db
+      db:
+        condition: service_healthy
 
     env_file:
       - .env
@@ -76,8 +77,10 @@ services:
     container_name: ${PROJECT_NAME}-app
 
     depends_on:
-      - db
-      - api
+      db:
+        condition: service_healthy
+      api:
+        condition: service_started
 
     env_file:
       - .env
