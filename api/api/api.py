@@ -30,7 +30,6 @@ def get_text(background_tasks: BackgroundTasks, tags: str = None, asc: bool = Tr
     # get data
     data = template_execute(
         "get_text_where_tags.sql",
-        "fetchone",
         parsed_tags = parse_tags(tags),
         asc = asc
         )
