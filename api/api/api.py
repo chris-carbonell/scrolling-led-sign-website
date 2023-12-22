@@ -28,7 +28,7 @@ def get_text(background_tasks: BackgroundTasks, tags: str = None, asc: bool = Tr
     '''
 
     # get data
-    record = template_execute(
+    data = template_execute(
         "get_text_where_tags.sql",
         "fetchone",
         parsed_tags = parse_tags(tags),
@@ -37,12 +37,13 @@ def get_text(background_tasks: BackgroundTasks, tags: str = None, asc: bool = Tr
 
     # parse
     
-    # record exists
-    if record:
+    # data exists
+    if data:
         
         # parse
-        text_id = record[0]
-        text = record[1]
+        record = data[0]
+        text_id = record['text_id']
+        text = record['text']
 
         # update dt_requested in background task
         background_tasks.add_task(
