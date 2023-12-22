@@ -58,14 +58,10 @@ def template_execute(path_template: str, **kwargs):
             r = curs.fetchall()  # list of tups
             column_names = [desc[0] for desc in curs.description]
 
-        # fetch
-        if fetch:
-            if fetch == "fetchone":
-                r = curs.fetchone()
-            elif fetch == "fetchall":
-                r = curs.fetchall()
-            else:
-                raise AttributeError(f"fetch ({fetch}) not supported")
-            return r
-
-    return
+            # convert to list of dicts
+            r = [{col: obj for col, obj in zip(column_names, row)} for row in r]
+        
+        else:
+            return  # no data to return
+    
+    return r
