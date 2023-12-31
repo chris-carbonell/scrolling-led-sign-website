@@ -4,13 +4,16 @@
 # Dependencies
 
 # general
+from datetime import datetime
 import time
 
 # app
 import streamlit as st
 
 # api
-import requests
+# import requests
+import asyncio
+from postgrest import AsyncPostgrestClient
 
 # constants
 from constants import *
@@ -21,17 +24,14 @@ def insert_text(text: str):
     '''
     insert text into db
     '''
-    
-    # post
-    r = requests.put(URL_API + "/text", params = {'text': text})
-
-    # get
-    params = {
-        'requested': False,
-        'asc': False,
-        'limit': 10
+    data = {
+        'dt_entered': datetime.now().isoformat(),
+        'text_source': "streamlit+postgrest",
+        'text': text,
     }
-    r = requests.get(URL_API + "/texts", params = params)
+    st.write(HEADERS)
+    st.write(str(data))
+    r = requests.post(URL_API + "/texts", headers=HEADERS, data=str(data))
 
 # App
 
