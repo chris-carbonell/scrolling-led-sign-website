@@ -23,7 +23,6 @@ def insert_text(text: str):
     '''
     
     # post
-    # r = requests.put(URL_API + "/text", params = {'text': text})
     r = requests.put(URL_API + "/text", params = {'text': text})
 
     # get
