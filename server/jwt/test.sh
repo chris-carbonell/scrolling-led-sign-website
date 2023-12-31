@@ -13,12 +13,12 @@ source "$DIR/../../.env"
 # delete
 # curl -X 'DELETE' \
 #   -H "Authorization: Bearer $SERVER_JWT_TOKEN"   \
-#   "http://192.168.1.45:$SERVER_PORT/texts?text_id=eq.1" \
+#   "http://$LOCAL_IP:$SERVER_PORT/texts?text_id=eq.1" \
 #   -H 'accept: application/json'
 
 # post
 curl -X 'POST' \
   -H "Authorization: Bearer $SERVER_JWT_TOKEN"   \
-  "http://192.168.1.45:$SERVER_PORT/texts" \
+  "http://$LOCAL_IP:$SERVER_PORT/texts" \
   -H 'Content-Type: application/json' \
   -d '{ "text": "value1" }'
