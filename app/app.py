@@ -11,7 +11,6 @@ import time
 import streamlit as st
 
 # api
-# import requests
 import asyncio
 from postgrest import AsyncPostgrestClient
 
@@ -20,18 +19,22 @@ from constants import *
 
 # Funcs
 
-def insert_text(text: str):
+async def insert_text(text: str):
     '''
     insert text into db
     '''
-    data = {
-        'dt_entered': datetime.now().isoformat(),
-        'text_source': "streamlit+postgrest",
-        'text': text,
-    }
-    st.write(HEADERS)
-    st.write(str(data))
-    r = requests.post(URL_API + "/texts", headers=HEADERS, data=str(data))
+
+    # get
+    # async with AsyncPostgrestClient(URL_API) as client:
+    #     # client.auth(token = os.environ['SERVER_JWT_TOKEN'])
+    #     r = await client.from_("texts").select("*").execute()
+    #     res = r.data
+    # st.write(res)
+
+    # put
+    async with AsyncPostgrestClient(URL_API) as client:
+        client.auth(token = os.environ['SERVER_JWT_TOKEN'])
+        await client.from_("texts").insert({ "text": text }).execute()
 
 # App
 
@@ -74,4 +77,5 @@ if st.session_state['access_granted']:
         submitted = st.form_submit_button("Submit")
 
     if submitted:
-        insert_text(text)
+        # insert_text(text)
+        asyncio.run(insert_text(text))
