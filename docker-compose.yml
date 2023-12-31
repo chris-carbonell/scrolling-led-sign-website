@@ -10,8 +10,7 @@ services:
   # # db
   # database
   db:
-    build: ./db  # build with `docker-compose build`
-
+    image: postgres:16.1
     container_name: ${PROJECT_ABBREV}-db
 
     restart: always
@@ -20,12 +19,13 @@ services:
       - "5432:${POSTGRES_PORT}"
     
     environment:
+      - POSTGRES_DB=${POSTGRES_DB}
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-      - POSTGRES_DB=${POSTGRES_DB}
     
     volumes:
       - ./db/data:/var/lib/postgresql/data
+      - ./db/init:/docker-entrypoint-initdb.d/
 
     healthcheck:
       test: pg_isready -d ${POSTGRES_DB} -U ${POSTGRES_USER}
