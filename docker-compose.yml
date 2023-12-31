@@ -36,37 +36,6 @@ services:
     networks:
       - sls
 
-  # # api
-  # fastapi backend for interacting with database
-  api:
-    build: ./api  # build with `docker-compose build`
-
-    container_name: ${PROJECT_ABBREV}-api
-
-    depends_on:
-      db:
-        condition: service_healthy
-
-    env_file:
-      - .env
-
-    # TODO: once working, don't map this port
-    ports:
-      - ${API_PORT}:8000
-
-    # TODO: fix the health check (it was preventing Treafik from processing the labels)
-    # healthcheck:
-    #   test: curl http://localhost:${APP_PORT}/healthcheck || exit 1
-    #   # TODO: can pytest be used here instead?
-    #   interval: 1m30s
-    #   timeout: 10s
-    #   retries: 3
-    #   start_period: 2m
-
-    networks:
-      - sls
-      - web
-
   # # app
   # streamlit frontend for interacting with database
   app:

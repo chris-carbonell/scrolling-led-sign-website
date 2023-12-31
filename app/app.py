@@ -4,34 +4,39 @@
 # Dependencies
 
 # general
+from datetime import datetime
+import os
 import time
 
 # app
 import streamlit as st
 
 # api
-import requests
+import asyncio
+from postgrest import AsyncPostgrestClient
 
 # constants
 from constants import *
 
 # Funcs
 
-def insert_text(text: str):
+async def get_codes():
+    '''
+    get valid access codes
+    '''
+    async with AsyncPostgrestClient(URL_API) as client:
+        r = await client.from_("codes").select("code").execute()
+        res = r.data  # e.g., [{'code': 'some_code'}]
+
+    return [d['code'] for d in res]
+
+async def insert_text(text: str):
     '''
     insert text into db
     '''
-    
-    # post
-    r = requests.put(URL_API + "/text", params = {'text': text})
-
-    # get
-    params = {
-        'requested': False,
-        'asc': False,
-        'limit': 10
-    }
-    r = requests.get(URL_API + "/texts", params = params)
+    async with AsyncPostgrestClient(URL_API) as client:
+        client.auth(token = os.environ['SERVER_JWT_TOKEN'])
+        await client.from_("texts").insert({ "text": text }).execute()
 
 # App
 
@@ -56,7 +61,7 @@ if not st.session_state['access_granted']:
 
     # give feedback on access code
     if submitted:
-        if st.session_state['access_code'] in ACCESS_CODE_WHITELIST:
+        if st.session_state['access_code'] in asyncio.run(get_codes()):
             st.session_state['access_granted'] = True  # grant access
             st.success(f"welcome, {name}!")  # welcome message
             time.sleep(1)  # wait so user can read the welcome message
@@ -74,4 +79,4 @@ if st.session_state['access_granted']:
         submitted = st.form_submit_button("Submit")
 
     if submitted:
-        insert_text(text)
+        asyncio.run(insert_text(text))

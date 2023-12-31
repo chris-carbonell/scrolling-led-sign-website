@@ -1,2 +1,5 @@
-# www
+# app
 streamlit
+
+# data
+postgrest
