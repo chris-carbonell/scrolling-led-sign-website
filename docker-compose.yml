@@ -9,13 +9,10 @@ services:
 
   # # db
   # database
-  # * login with:<br>
-  # `docker exec -it ${CONTAINER_NAME} psql -d ${POSTGRES_DB} -U ${POSTGRES_USER} -W`
-  # * once in `psql`, quit with `\q`
   db:
     build: ./db  # build with `docker-compose build`
 
-    container_name: ${PROJECT_NAME}-db
+    container_name: ${PROJECT_ABBREV}-db
 
     restart: always
 
@@ -44,7 +41,7 @@ services:
   api:
     build: ./api  # build with `docker-compose build`
 
-    container_name: ${PROJECT_NAME}-api
+    container_name: ${PROJECT_ABBREV}-api
 
     depends_on:
       db:
@@ -53,12 +50,13 @@ services:
     env_file:
       - .env
 
+    # TODO: once working, don't map this port
     ports:
-      - ${PORT_API}:8000
+      - ${API_PORT}:8000
 
     # TODO: fix the health check (it was preventing Treafik from processing the labels)
     # healthcheck:
-    #   test: curl http://localhost:${PORT_APP}/healthcheck || exit 1
+    #   test: curl http://localhost:${APP_PORT}/healthcheck || exit 1
     #   # TODO: can pytest be used here instead?
     #   interval: 1m30s
     #   timeout: 10s
@@ -74,7 +72,7 @@ services:
   app:
     build: ./app  # build with `docker-compose build`
 
-    container_name: ${PROJECT_NAME}-app
+    container_name: ${PROJECT_ABBREV}-app
 
     depends_on:
       db:
@@ -86,7 +84,7 @@ services:
       - .env
 
     ports:
-      - ${PORT_APP}:8501
+      - ${APP_PORT}:8501
 
     networks:
       - sls
