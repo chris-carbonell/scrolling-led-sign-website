@@ -152,7 +152,6 @@ services:
     ports:
       - "${SWAGGER_PORT}:8080"
     expose:
-      # - "8080"
       - "${SWAGGER_PORT}"
 
     environment:
