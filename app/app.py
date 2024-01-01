@@ -47,8 +47,25 @@ async def insert_text(name: str, text: str):
 
 # App
 
+# set up
+
+# set title in tab
+st.set_page_config(page_title=os.environ['DOMAIN'])
+
+# hide 3 dots
+hide_streamlit_style = """
+            <style>
+            #MainMenu {visibility: hidden;}
+            </style>
+            """
+st.markdown(hide_streamlit_style, unsafe_allow_html=True) 
+
 # headers
-st.title("Scrolling LED Sign")
+st.title(os.environ['DOMAIN'])
+st.header("Scrolling LED Sign")
+
+# welcome gif
+st.image(get_gif(os.environ['APP_MAIN_GIFS'].split(",")))
 
 # initialize
 if 'access_granted' not in st.session_state:
@@ -61,7 +78,7 @@ if not st.session_state['access_granted']:
     
     # access code form
     with st.form("form_access", clear_on_submit=True):
-        st.title("Access")
+        st.header("Access")
         st.session_state['name'] = st.text_input("your name")
         st.session_state['access_code'] = st.text_input("access code")
         submitted = st.form_submit_button("Submit")
@@ -81,7 +98,7 @@ if st.session_state['access_granted']:
     
     # get input text
     with st.form("form_text", clear_on_submit=True):
-        st.title("Send Message")
+        st.header("Send Message")
         text = st.text_input("send a message")
         submitted = st.form_submit_button("Submit")
 
