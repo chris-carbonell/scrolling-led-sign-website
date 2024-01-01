@@ -30,13 +30,17 @@ async def get_codes():
 
     return [d['code'] for d in res]
 
-async def insert_text(text: str):
+async def insert_text(name: str, text: str):
     '''
     insert text into db
     '''
     async with AsyncPostgrestClient(URL_API) as client:
         client.auth(token = os.environ['SERVER_JWT_TOKEN'])
-        await client.from_("texts").insert({ "text": text }).execute()
+        data = {
+            'name': name,
+            'text': text,
+        }
+        await client.from_("texts").insert(data).execute()
 
 # App
 
@@ -79,4 +83,4 @@ if st.session_state['access_granted']:
         submitted = st.form_submit_button("Submit")
 
     if submitted:
-        asyncio.run(insert_text(text))
+        asyncio.run(insert_text(name, text))
