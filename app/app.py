@@ -15,6 +15,9 @@ import streamlit as st
 import asyncio
 from postgrest import AsyncPostgrestClient
 
+# giphy
+from giphy import get_gif
+
 # constants
 from constants import *
 
@@ -59,7 +62,7 @@ if not st.session_state['access_granted']:
     # access code form
     with st.form("form_access", clear_on_submit=True):
         st.title("Access")
-        name = st.text_input("your name")
+        st.session_state['name'] = st.text_input("your name")
         st.session_state['access_code'] = st.text_input("access code")
         submitted = st.form_submit_button("Submit")
 
@@ -67,7 +70,7 @@ if not st.session_state['access_granted']:
     if submitted:
         if st.session_state['access_code'] in asyncio.run(get_codes()):
             st.session_state['access_granted'] = True  # grant access
-            st.success(f"welcome, {name}!")  # welcome message
+            st.success(f"welcome, {st.session_state['name']}!")  # welcome message
             time.sleep(1)  # wait so user can read the welcome message
             st.rerun()  # rerun so we can show the input form
         else:
@@ -83,4 +86,14 @@ if st.session_state['access_granted']:
         submitted = st.form_submit_button("Submit")
 
     if submitted:
-        asyncio.run(insert_text(name, text))
+        asyncio.run(insert_text(st.session_state['name'], text))
+        st.success(f"text successfully submitted!")
+        st.image(get_gif([
+            "success",
+            "accomplishment",
+            "achievement",
+            "victory",
+            "win",
+            "yes",
+            "boom",
+        ]))

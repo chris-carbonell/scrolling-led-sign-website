@@ -24,6 +24,7 @@ RUN pip install -r requirements.txt
 
 # copy app
 COPY constants.py .
+COPY giphy.py .
 COPY app.py .
 
 CMD ["streamlit", "run", "app.py"]
