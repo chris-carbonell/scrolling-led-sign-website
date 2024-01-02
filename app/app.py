@@ -113,6 +113,8 @@ def get_paginated_table(table: str):
         value="",
         key=_get_key("text_input"),
     )
+    paginated_table.caption("e.g., `text_id=gt.2&name=eq.carbo&dt_entered=gte.2024-01-02`")
+    paginated_table.caption("https://postgrest.org/en/stable/references/api/tables_views.html")
 
     # get data
     data = asyncio.run(get_data(table, query_params))
