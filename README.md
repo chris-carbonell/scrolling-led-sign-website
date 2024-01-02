@@ -9,8 +9,12 @@ frontend/backend app to control my DIY scrolling LED sign
     * app should be available at `${DOMAIN}` (via Traefik)
 
 # Highlights
-* Streamlit frontend (incl. access code verification)
-* PostgREST backend (incl. Swagger docs)
+* Streamlit frontend
+    * access code verification
+    * paginated tables
+* PostgREST backend
+    * in `postgrest-py`, expose `QueryParams` to filter data
+    * Swagger docs
 * reverse proxy and load balancer via Traefik
 * pytest
 
