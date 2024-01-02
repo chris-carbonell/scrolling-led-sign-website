@@ -51,10 +51,32 @@ async def insert_text(name: str, text: str):
 
 async def get_data(table: str, query: str = None):
     '''
-    get text data
+    get data
     '''
     async with AsyncPostgrestClient(URL_API) as client:
-        r = await client.from_(table).select("*").execute()
+        
+        # get builder
+        builder = client.from_(table).select("*")
+
+        # parse query
+        # for example:
+        # query = "text_id=gt.2&name=eq.carbo"
+        # ("text_id", "gt.2") and ("name", "eq.carbo") get added to builder params
+        # as of 2024-01, this functionality isn't exposed in the higher levels of `postgrest-py`
+        # https://pydoc.dev/httpx/latest/httpx.QueryParams.html
+        # https://github.com/supabase-community/postgrest-py/blob/fb0b8c2590a3d53f67c84e9f52917768a13d7153/postgrest/_async/request_builder.py#L28
+        if query != "":
+            for q in query.split("&"):
+                try:
+                    key, val = q.split("=")
+                    builder.params = builder.params.add(key, val)
+                except Exception as e:
+                    st.error(f"cannot parse query: {q}")
+                    st.error(e)
+                    pass
+        
+        # execute
+        r = await builder.execute()
         res = r.data  # e.g., [{'code': 'some_code', 'is_admin': True}]
 
     return pd.DataFrame.from_records(res)
@@ -68,23 +90,43 @@ def split_frame(input_df, rows):
     df = [input_df.loc[i : i + rows - 1, :] for i in range(0, len(input_df), rows)]
     return df
 
-def get_paginated_table(header: str, data: pd.DataFrame):
+def get_paginated_table(table: str):
     '''
     build table with pagination
     '''
 
+    def _get_key(id: str):
+        '''
+        create key based on the table
+        to help differentiate this paginated table from other paginated tables
+        '''
+        return f"{table}_{id}"
+
     paginated_table = st.container()
 
-    paginated_table.header(header)
+    paginated_table.header(table)
+
+    # top menu
+    # query params
+    query_params = paginated_table.text_input(
+        label="PostgREST query params",
+        value="",
+        key=_get_key("text_input"),
+    )
+
+    # get data
+    data = asyncio.run(get_data(table, query_params))
     
+    # bottom menu
+    # pagination
     bottom_menu = st.columns((4, 1, 1))
     with bottom_menu[2]:
-        batch_size = st.selectbox("Page Size", options=[5, 10, 20], key=f"{header}_selectbox")
+        batch_size = st.selectbox("Page Size", options=[5, 10, 20], key=_get_key("selectbox"))
     with bottom_menu[1]:
         total_pages = math.ceil(len(data) / batch_size)
         current_page = st.number_input(
             "Page", min_value=1, max_value=total_pages, step=1,
-            key=f"{header}_number_input"
+            key=_get_key("number_input"),
         )
     with bottom_menu[0]:
         st.markdown(f"Page **{current_page}** of **{total_pages}** ")
@@ -171,9 +213,7 @@ if st.session_state['access_granted']:
 if st.session_state['access_granted_admin']:
 
     # Texts
-    texts = asyncio.run(get_data("texts"))
-    texts_table = get_paginated_table("Texts", texts)
+    texts_table = get_paginated_table("texts")
 
     # Codes
-    codes = asyncio.run(get_data("codes"))
-    codes_table = get_paginated_table("Codes", codes)
+    codes_table = get_paginated_table("codes")
