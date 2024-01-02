@@ -28,10 +28,10 @@ async def get_codes():
     get valid access codes
     '''
     async with AsyncPostgrestClient(URL_API) as client:
-        r = await client.from_("codes").select("code").execute()
-        res = r.data  # e.g., [{'code': 'some_code'}]
+        r = await client.from_("codes").select("code", "is_admin").execute()
+        res = r.data  # e.g., [{'code': 'some_code', 'is_admin': True}]
 
-    return [d['code'] for d in res]
+    return {d['code']: d['is_admin'] for d in res}
 
 async def insert_text(name: str, text: str):
     '''
@@ -72,6 +72,7 @@ if 'access_granted' not in st.session_state:
     st.session_state['access_granted'] = False  # True = access granted, False = no access
     st.session_state['access_code'] = None  # what access code did they try?
     st.session_state['access_tries'] = 0  # how many times did they hit the submit button on the access form?
+    st.session_state['access_granted_admin'] = False  # True = admin access granted, False = no admin access
 
 # access denied
 if not st.session_state['access_granted']:
@@ -85,8 +86,10 @@ if not st.session_state['access_granted']:
 
     # give feedback on access code
     if submitted:
-        if st.session_state['access_code'] in asyncio.run(get_codes()):
+        codes = asyncio.run(get_codes())
+        if st.session_state['access_code'] in codes:
             st.session_state['access_granted'] = True  # grant access
+            st.session_state['access_granted_admin'] = codes[st.session_state['access_code']]  # grant admin access if applicable
             st.success(f"welcome, {st.session_state['name']}!")  # welcome message
             time.sleep(1)  # wait so user can read the welcome message
             st.rerun()  # rerun so we can show the input form
@@ -114,3 +117,5 @@ if st.session_state['access_granted']:
             "yes",
             "boom",
         ]))
+
+# admin access
