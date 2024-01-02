@@ -176,11 +176,14 @@ hide_streamlit_style = """
 st.markdown(hide_streamlit_style, unsafe_allow_html=True) 
 
 # headers
-st.title(os.environ['DOMAIN'])
-st.header("Scrolling LED Sign")
 
-# welcome gif
-st.image(get_gif(os.environ['APP_MAIN_GIFS'].split(",")))
+header = st.columns(2)
+with header[0]:
+    st.title(os.environ['DOMAIN'])  # title
+with header[1]:
+    st.image(get_gif(os.environ['APP_MAIN_GIFS'].split(",")))  # welcome gif
+
+st.header("Scrolling LED Sign")
 
 # initialize
 if 'access_granted' not in st.session_state:
