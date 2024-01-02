@@ -10,7 +10,7 @@ from urllib import parse, request
 
 # Funcs
 
-def get_gif(query: str | list, limit: int = 5):
+def get_gif(query: str | list, limit: int = 20):
     '''
     get gif url
     '''
@@ -32,4 +32,4 @@ def get_gif(query: str | list, limit: int = 5):
     with request.urlopen("".join((url, "?", params))) as response:
         data = json.loads(response.read())
 
-    return data['data'][idx]['images']['downsized_medium']['url']
+    return data['data'][idx]['images']['fixed_height']['url']
