@@ -37,17 +37,39 @@ async def get_codes():
 
     return {d['code']: d['is_admin'] for d in res}
 
-async def insert_text(name: str, text: str):
+async def insert_code(code: str):
     '''
-    insert text into db
+    insert code into codes
     '''
     async with AsyncPostgrestClient(URL_API) as client:
         client.auth(token = os.environ['SERVER_JWT_TOKEN'])
         data = {
+            'dt_entered': datetime.now().isoformat(),
+            'code': code,
+            'is_admin': False,
+        }
+        await client.from_("codes").insert(data).execute()
+
+async def insert_text(name: str, text: str):
+    '''
+    insert text into texts
+    '''
+    async with AsyncPostgrestClient(URL_API) as client:
+        client.auth(token = os.environ['SERVER_JWT_TOKEN'])
+        data = {
+            'dt_entered': datetime.now().isoformat(),
             'name': name,
             'text': text,
         }
         await client.from_("texts").insert(data).execute()
+
+async def delete_code(code: str):
+    '''
+    delete code from codes
+    '''
+    async with AsyncPostgrestClient(URL_API) as client:
+        client.auth(token = os.environ['SERVER_JWT_TOKEN'])
+        await client.from_("codes").delete().eq("code", code).execute()
 
 async def get_data(table: str, query: str = None):
     '''
@@ -104,7 +126,7 @@ def get_paginated_table(table: str):
 
     paginated_table = st.container()
 
-    paginated_table.header(table)
+    paginated_table.subheader(table)
 
     # top menu
     # query params
@@ -214,8 +236,27 @@ if st.session_state['access_granted']:
 # admin access
 if st.session_state['access_granted_admin']:
 
-    # Texts
+    # Data
+    # paginated tables
+    st.header("Data")
     texts_table = get_paginated_table("texts")
-
-    # Codes
     codes_table = get_paginated_table("codes")
+
+    # Code Management
+    
+    st.header("Code Management")
+
+    with st.form("form_code_management", clear_on_submit=True):
+        radio_form_code_management = st.radio("add or delete", options=["add", "delete"])
+        code_form_code_management = st.text_input("code")
+        submitted_form_code_management = st.form_submit_button("Submit")
+
+    if submitted_form_code_management:
+        if radio_form_code_management == "add":
+            asyncio.run(insert_code(code_form_code_management))
+        elif radio_form_code_management == "delete":
+            # prevent deletion of admin code
+            if code_form_code_management != os.environ['APP_ADMIN_PASSWORD']:
+                asyncio.run(delete_code(code_form_code_management))
+        else:
+            pass
