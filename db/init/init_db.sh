@@ -37,7 +37,7 @@ execute "
     CREATE TABLE IF NOT EXISTS codes (
         code_id SERIAL PRIMARY KEY,
         dt_entered TIMESTAMP WITH TIME ZONE,
-        code VARCHAR(255),
+        code VARCHAR(255) UNIQUE,
         is_admin BOOLEAN
     );
 "
