@@ -65,6 +65,7 @@ services:
 
       ## http
       - "traefik.http.routers.scrolling-led-sign.entrypoints=web"
+      # - "traefik.http.routers.scrolling-led-sign.rule=Host(`${DOMAIN}`) && PathPrefix(`/sign`) || Host(`www.${DOMAIN}`) && PathPrefix(`/sign`)"
       - "traefik.http.routers.scrolling-led-sign.rule=Host(`${DOMAIN}`) || Host(`www.${DOMAIN}`)"
 
       ## https
