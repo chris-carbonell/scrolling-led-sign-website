@@ -66,24 +66,24 @@ services:
       # routers
 
       ## http
-      - "traefik.http.routers.scrolling-led-sign.entrypoints=web"
-      - "traefik.http.routers.scrolling-led-sign.rule=Host(`${DOMAIN}`) || PathPrefix(`/${APP_SUBFOLDER}`)"
+      - "traefik.http.routers.${PROJECT_NAME}.entrypoints=web"
+      - "traefik.http.routers.${PROJECT_NAME}.rule=Host(`${DOMAIN}`) || PathPrefix(`/${APP_SUBFOLDER}`)"
 
       ## https
-      - "traefik.http.routers.scrolling-led-sign-secure.entrypoints=websecure"
-      - "traefik.http.routers.scrolling-led-sign-secure.rule=Host(`${DOMAIN}`) || PathPrefix(`/${APP_SUBFOLDER}`)"
-      - "traefik.http.routers.scrolling-led-sign-secure.tls=true"
-      - "traefik.http.routers.scrolling-led-sign-secure.tls.certresolver=cloudflare"
-      - "traefik.http.routers.scrolling-led-sign-secure.service=scrolling-led-sign"
+      - "traefik.http.routers.${PROJECT_NAME}-secure.entrypoints=websecure"
+      - "traefik.http.routers.${PROJECT_NAME}-secure.rule=Host(`${DOMAIN}`) || PathPrefix(`/${APP_SUBFOLDER}`)"
+      - "traefik.http.routers.${PROJECT_NAME}-secure.tls=true"
+      - "traefik.http.routers.${PROJECT_NAME}-secure.tls.certresolver=cloudflare"
+      - "traefik.http.routers.${PROJECT_NAME}-secure.service=${PROJECT_NAME}"
 
       # middlewares
-      - "traefik.http.routers.scrolling-led-sign.middlewares=https-redirect@file"
-      # - "traefik.http.routers.scrolling-led-sign-secure.middlewares=csrf@file"
-      # - "traefik.http.routers.scrolling-led-sign-secure.middlewares=secure-headers@file"
+      - "traefik.http.routers.${PROJECT_NAME}.middlewares=https-redirect@file"
+      # - "traefik.http.routers.${PROJECT_NAME}-secure.middlewares=csrf@file"
+      # - "traefik.http.routers.${PROJECT_NAME}-secure.middlewares=secure-headers@file"
 
       # # services
-      # - "traefik.http.services.scrolling-led-sign.loadbalancer.server.scheme=https"  # cloudflare gateway time-out
-      - "traefik.http.services.scrolling-led-sign.loadbalancer.server.port=8501"
+      # - "traefik.http.services.${PROJECT_NAME}.loadbalancer.server.scheme=https"  # cloudflare gateway time-out
+      - "traefik.http.services.${PROJECT_NAME}.loadbalancer.server.port=8501"
 
   # # server
   # PostgREST
