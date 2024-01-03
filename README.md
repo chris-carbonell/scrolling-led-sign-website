@@ -20,3 +20,4 @@ frontend/backend app to control my DIY scrolling LED sign
 
 # Resources
 * requests between containers<br>https://stackoverflow.com/questions/50040023/containers-communication-with-python-requests
+* streamlit app served on subfolder<br>https://discuss.streamlit.io/t/deploying-to-a-folder-path-on-server/19059/2
