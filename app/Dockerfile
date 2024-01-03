@@ -6,10 +6,6 @@ FROM python:3.11-slim
 # ports
 EXPOSE 8501
 
-# setup streamlit
-RUN mkdir -p /root/.streamlit
-COPY config.toml /root/.streamlit/config.toml
-
 # install dependencies
 RUN apt-get update
 RUN pip install --upgrade pip
@@ -21,6 +17,10 @@ WORKDIR /usr/src/app
 # install requirements
 COPY ./requirements.txt .
 RUN pip install -r requirements.txt
+
+# setup streamlit
+RUN mkdir -p /root/.streamlit
+COPY config.toml /root/.streamlit/config.toml
 
 # copy app
 COPY constants.py .
