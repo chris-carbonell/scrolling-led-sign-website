@@ -26,5 +26,3 @@ COPY config.toml /root/.streamlit/config.toml
 COPY constants.py .
 COPY giphy.py .
 COPY app.py .
-
-CMD ["streamlit", "run", "app.py", "--server.baseUrlPath=/sign"]

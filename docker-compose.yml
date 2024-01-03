@@ -41,6 +41,8 @@ services:
 
     container_name: ${PROJECT_ABBREV}-app
 
+    entrypoint: ["streamlit", "run", "app.py", "--server.baseUrlPath=/${APP_SUBFOLDER}"]
+
     depends_on:
       db:
         condition: service_healthy
@@ -65,11 +67,11 @@ services:
 
       ## http
       - "traefik.http.routers.scrolling-led-sign.entrypoints=web"
-      - "traefik.http.routers.scrolling-led-sign.rule=Host(`${DOMAIN}`) || PathPrefix(`/sign`)"
+      - "traefik.http.routers.scrolling-led-sign.rule=Host(`${DOMAIN}`) || PathPrefix(`/${APP_SUBFOLDER}`)"
 
       ## https
       - "traefik.http.routers.scrolling-led-sign-secure.entrypoints=websecure"
-      - "traefik.http.routers.scrolling-led-sign-secure.rule=Host(`${DOMAIN}`) || PathPrefix(`/sign`)"
+      - "traefik.http.routers.scrolling-led-sign-secure.rule=Host(`${DOMAIN}`) || PathPrefix(`/${APP_SUBFOLDER}`)"
       - "traefik.http.routers.scrolling-led-sign-secure.tls=true"
       - "traefik.http.routers.scrolling-led-sign-secure.tls.certresolver=cloudflare"
       - "traefik.http.routers.scrolling-led-sign-secure.service=scrolling-led-sign"
